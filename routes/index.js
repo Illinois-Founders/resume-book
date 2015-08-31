@@ -14,6 +14,7 @@ router.get('/students', function (req, res, next) {
 router.post('/students', passport.authenticate('saml'), function (req, res, next) {
 	console.log("Student logged in!");
 	console.log(req.user);
+	// REGISTER IF NECESSARY
 	res.redirect('/');
 });
 

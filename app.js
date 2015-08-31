@@ -4,9 +4,27 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var phone = require('phone');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+
+// MONGOOSE
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://student:abcdef@localhost:27017/test');
+var Employer = mongoose.model('Employer', {
+  username: String,
+  password: String,
+  email: String,
+  company: String
+});
+var Student = mongoose.model('Student', {
+  netID: String,
+  address: String,
+  phoneNumber: String,
+  gradYear: String,
+  resumeURL: String
+});
 
 // PASSPORT JS VARS
 var passport = require('passport');
@@ -26,7 +44,7 @@ passport.use(new SamlStrategy({
 ));
 
 passport.use(new LocalStrategy(
-  function (profile, done) {
+  function (username, password, done) {
     // find user
   }
 ));
