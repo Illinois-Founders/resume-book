@@ -14,4 +14,9 @@ router.get('/employers', function(req, res, next){
 	res.render('employer-login', {title: 'Employer Login Page' });
 });
 
+router.post('/employers', function(req, res, next){
+	console.log('post to employers..');
+	console.log(req);
+});
+
 module.exports = router;
