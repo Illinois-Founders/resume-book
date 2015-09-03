@@ -31,17 +31,6 @@ var SamlStrategy = require('passport-saml').Strategy; // for students
 var LocalStrategy = require('passport-local').Strategy; // for employers
 
 // PASSPORT JS CONFIG
-passport.use(new SamlStrategy({
-    path: '/login/callback',
-    entryPoint: 'https://shibboleth.illinois.edu/idp/profile/SAML2/Redirect/SSO',
-    issuer: 'illinois-founders',
-    logoutUrl: 'https://shibboleth.illinois.edu/idp/logout.jsp',
-    passReqToCallback: true
-  }, function (profile, done) {
-    return done(null, profile);
-  }
-));
-
 passport.use(new LocalStrategy(
   function (username, password, done) {
     // find user

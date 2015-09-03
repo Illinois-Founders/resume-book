@@ -13,11 +13,8 @@ router.get('/students', function (req, res, next) {
 });
 
 // STUDENT LOGIN METHOD
-router.post('/students', passport.authenticate('saml'), function (req, res, next) {
-	console.log("Student logged in!");
-	console.log(req.user);
-	// REGISTER IF NECESSARY
-	res.redirect('/');
+router.post('/students', function (req, res, next) {
+	console.log("log in");
 });
 
 router.get('/employers', function (req, res, next) {
