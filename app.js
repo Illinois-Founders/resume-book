@@ -18,7 +18,7 @@ passport.serializeUser(Employer.serializeUser());
 passport.deserializeUser(Employer.deserializeUser());
 
 // MONGOOSE CONNECTION
-mongoose.connect('mongodb://student:abcdef@localhost:27017/founders-students');
+mongoose.connect('mongodb://localhost:27017/founders-students');
 
 var app = express();
 
