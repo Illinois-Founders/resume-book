@@ -4,38 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy; // for employers
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-// MONGOOSE
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://student:abcdef@localhost:27017/test');
-var Employer = mongoose.model('Employer', {
-  username: String,
-  password: String,
-  email: String,
-  company: String
-});
-var Student = mongoose.model('Student', {
-  netID: String,
-  address: String,
-  phoneNumber: String,
-  gradYear: String,
-  resumeURL: String
-});
-
-// PASSPORT JS VARS
-var passport = require('passport');
-var SamlStrategy = require('passport-saml').Strategy; // for students
-var LocalStrategy = require('passport-local').Strategy; // for employers
-
 // PASSPORT JS CONFIG
-passport.use(new LocalStrategy(
-  function (username, password, done) {
-    // find user
-  }
-));
+var Employer = require('./models/employer');
+passport.use(new LocalStrategy(Employer.authenticate()));
+passport.serializeUser(Employer.serializeUser());
+passport.deserializeUser(Employer.deserializeUser());
+
+// MONGOOSE CONNECTION
+mongoose.connect('mongodb://student:abcdef@localhost:27017/founders-students');
 
 var app = express();
 
