@@ -21,9 +21,11 @@ router.get('/employers', function (req, res, next) {
 // EMPLOYER REGISTRATION METHOD
 router.post('/employers/register', function (req, res) {
 	Employer.register(new Employer({username: req.body.username}), req.body.password, function (err, account) {
+		console.log("Registering new employer");
 		if (err) {
-			return res.render('register', {account: account});
+			console.log("Error while trying to register!");
 		}
+		res.redirect('/');
 	});
 });
 
@@ -32,6 +34,10 @@ router.post('/employers', passport.authenticate('local'), function (req, res, ne
 	console.log("Employer logged in!");
 	console.log(req.user);
 	res.redirect('/');
+});
+
+router.get('/employers/dashboard', function (req, res) {
+	console.log("ensure logged in, then let employers view dashboard");
 });
 
 // EMPLOYER LOGOUT METHOD

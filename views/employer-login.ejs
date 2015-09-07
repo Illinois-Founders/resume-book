@@ -5,7 +5,16 @@
 	</head>
 	<body>
 		<h1><%= title %></h1>
-		<form name="employer-login" method="post" action="/employers" >
+		<form name="employer-login" method="post" action="/employers">
+			<label for="username">Username</label>
+			<input type="text" name="username" placeholder="Username" required>
+			<label for="password">Password</label>
+			<input type="password" name="password" placeholder="Password" required>
+			<input type="submit">
+		</form>
+
+		<h2>Debug: Employer Registration</h2>
+		<form name="employer-registration" method="post" action="/employers/register">
 			<label for="username">Username</label>
 			<input type="text" name="username" placeholder="Username" required>
 			<label for="password">Password</label>

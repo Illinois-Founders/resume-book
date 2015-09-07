@@ -18,7 +18,7 @@ passport.serializeUser(Employer.serializeUser());
 passport.deserializeUser(Employer.deserializeUser());
 
 // MONGOOSE CONNECTION
-mongoose.connect('mongodb://localhost:27017/founders-students');
+mongoose.connect('mongodb://localhost:27017/founders-employers');
 
 var app = express();
 
@@ -32,6 +32,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({
+  secret: 'illini founders keepers',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
