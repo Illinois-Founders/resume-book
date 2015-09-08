@@ -7,7 +7,7 @@ var passport = require('passport');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-	res.render('index', { title: 'Founders Resume Book' });
+	res.render('index', { title: 'Founders Resume Book', user: req.user });
 });
 
 router.get('/students', function (req, res, next) {
