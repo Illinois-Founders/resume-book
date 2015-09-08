@@ -20,8 +20,12 @@ router.get('/employers', function (req, res, next) {
 
 // EMPLOYER REGISTRATION METHOD
 router.post('/employers/register', function (req, res) {
-	Employer.register(new Employer({username: req.body.username}), req.body.password, function (err, account) {
+	Employer.register(new Employer({
+		username: req.body.username,
+		company_name: req.body.companyName
+	}), req.body.password, function (err, account) {
 		console.log("Registering new employer");
+		account.company_name = req.body.companyName;
 		if (err) {
 			console.log("Error while trying to register!");
 		}

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var employerSchema = new Schema({
-  name: String,
+  company_name: String,
   username: { type: String, required: true, unique: true },
   password: { type: String }
 });
