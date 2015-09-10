@@ -10,8 +10,8 @@ router.get('/', function (req, res, next) {
 	res.render('index', { title: 'Founders Resume Book' });
 });
 
-router.get('/students', function (req, res, next) {
-	console.log("students submit resumes here");
+router.get('/students', function(req, res, next){
+	res.render('student-submission', {title: 'Student Resume Drop' });
 });
 
 router.get('/employers', function (req, res, next) {
@@ -44,6 +44,12 @@ router.get('/employers/dashboard', function (req, res) {
 router.post('/employers/logout', function (req, res) {
 	req.logout();
 	res.redirect('/');
+});
+
+router.post('/students', function(req, res, next){
+	console.log('post to students..')
+	console.log(req);
+	res.send(200);
 });
 
 module.exports = router;

@@ -1,11 +1,16 @@
 var mongoose = require('mongoose');
+var validator = require('validator');
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var employerSchema = new Schema({
-  name: String,
+  firstname: String,
+  secondname: String,
+  email: {type: String, validate: [validator.isEmail, 'invalid email'] },
   username: { type: String, required: true, unique: true },
-  password: { type: String }
+  password: { type: String }, 
+  created_at: {type: Date, default: Date.now }, 
+  expires : {type: Date}
 });
 
 employerSchema.plugin(passportLocalMongoose);

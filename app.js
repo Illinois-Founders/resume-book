@@ -8,6 +8,9 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy; // for employers
 
+var mongoose = require ('mongoose');
+// mongoose.connect('mongodb://localhost/test');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 

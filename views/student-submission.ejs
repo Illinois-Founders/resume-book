@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include partials/template/head.ejs %>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+		<form name="student-submission" method="post" action="/students" >
+			<label for="name">First</label>
+			<input type="text" name="name" placeholder="First" required> <br>
+			<label for="last">Last</label>
+			<input type="text" name="last" placeholder="Last" required> <br>
+			<label for="netid">Netid</label>
+			<input type="text" name="netid" placeholder="netid" required> <br>
+
+			<label for="gradyear">GradYear</label>
+			<select name="gradyear" id="">
+				<option value="2015">2015</option>
+				<option value="2016">2016</option>
+				<option value="2017">2017</option>
+				<option value="2018">2018</option>
+				<option value="2019">2019</option>
+			</select> <br>
+
+			<label for="level"> Level </label>
+			<select name="level" id="">
+				<option value="undergrad">Undergraduate</option>
+				<option value="masters">Master's</option>
+				<option value="phd">PhD</option>
+			</select> <br>
+
+			<!-- looking for -->
+			Looking for <br>
+			<input type="radio" name="lookingfor" value="fulltime"> Fulltime
+			<input type="radio" name="lookingfor" value="internship"> Internship
+			<br>
+			<!-- file upload -->
+			Resume <br>
+			<input type="file" name="resume" id="resume"> 
+			<br>
+			<input type="submit">
+		</form>
+	</body>
+
+</html>
