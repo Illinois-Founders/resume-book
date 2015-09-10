@@ -7,6 +7,7 @@ var employerSchema = new Schema({
   firstname: String,
   secondname: String,
   email: {type: String, validate: [validator.isEmail, 'invalid email'] },
+  company_name: {type: String, required: true, unique: true }, 
   username: { type: String, required: true, unique: true },
   password: { type: String }, 
   created_at: {type: Date, default: Date.now }, 
