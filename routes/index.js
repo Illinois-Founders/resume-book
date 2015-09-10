@@ -14,6 +14,19 @@ router.get('/students', function(req, res, next){
 	res.render('student-submission', {title: 'Student Resume Drop' });
 });
 
+// STUDENT SUBMISSION METHOD
+router.post('/students', function (req, res, next) {
+	console.log("first:", req.body.first);
+	console.log("last:", req.body.first);
+	console.log("netid:", req.body.netid);
+	console.log("gradyear:", req.body.gradyear);
+	console.log("level:", req.body.level);
+	console.log("lookingfor:", req.body.lookingfor);
+	console.log("resume:", req.body.resume);
+	console.log("req.files:", req.files);
+	res.redirect('/students');
+});
+
 router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page' });
 });
