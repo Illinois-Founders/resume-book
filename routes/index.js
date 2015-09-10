@@ -3,6 +3,9 @@ var passport = require('passport');
 var Employer = require('../models/employer');
 var router = express.Router();
 
+var multer = require('multer');
+var upload = multer({ limits: { fileSize: 512*1024 } }); // limit to 512 kb
+
 var passport = require('passport');
 
 /* GET home page. */
@@ -15,7 +18,8 @@ router.get('/students', function(req, res, next){
 });
 
 // STUDENT SUBMISSION METHOD
-router.post('/students', function (req, res, next) {
+var studentResumeField = upload.single('resume');
+router.post('/students', studentResumeField, function (req, res, next) {
 	console.log("first:", req.body.first);
 	console.log("last:", req.body.first);
 	console.log("netid:", req.body.netid);
