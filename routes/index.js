@@ -4,7 +4,11 @@ var Employer = require('../models/employer');
 var router = express.Router();
 
 var multer = require('multer');
-var upload = multer({ limits: { fileSize: 512*1024 } }); // limit to 512 kb
+var storage = multer.memoryStorage();
+var upload = multer({
+	limits: { fileSize: 512*1024 }, // limit resumes to 512 kb
+	storage: storage
+});
 
 var passport = require('passport');
 
@@ -26,8 +30,8 @@ router.post('/students', studentResumeField, function (req, res, next) {
 	console.log("gradyear:", req.body.gradyear);
 	console.log("level:", req.body.level);
 	console.log("lookingfor:", req.body.lookingfor);
-	console.log("resume:", req.body.resume);
-	console.log("req.files:", req.files);
+	// Resume file as a buffer
+	console.log("req.file:", req.file);
 	res.redirect('/students');
 });
 
