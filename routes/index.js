@@ -32,11 +32,11 @@ router.post('/students', studentResumeField, function (req, res, next) {
 	UIUCID(req.body.netid, function (err, details) {
 		if (err) {
 			console.log(req.body.netid + " not found");
-			res.status(400).send("NetID not found");
+			res.status(400).send("NetID not found.");
 		} else {
 			if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
 				(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
-				res.status(400).send("First name or last name doesn't match Illinois directory");
+				res.status(400).send("First name or last name doesn't match Illinois directory records.");
 			} else {
 				console.log("firstname:", req.body.firstname);
 				console.log("lastname:", req.body.lastname);
