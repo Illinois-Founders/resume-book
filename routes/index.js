@@ -66,16 +66,15 @@ router.post('/students', studentResumeField, function (req, res, next) {
 							(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
 							res.status(400).send("First name or last name doesn't match Illinois directory records.");
 						} else {
-							// TODO: change
-							console.log("firstname:", req.body.firstname);
-							console.log("lastname:", req.body.lastname);
-							console.log("netid:", req.body.netid);
-							console.log("gradyear:", req.body.gradyear);
-							console.log("level:", req.body.level);
-							console.log("lookingfor:", req.body.lookingfor);
-							// Resume file as a buffer
-							console.log("req.file:", req.file);
-							res.send("OK!");
+							updateInfoAndResume(req, function (error) {
+								if (error) {
+									console.log("Error while updating info and resume for " + req.body.netid);
+									res.status(500).send("Error while updating info and resume. Try again.");
+								} else {
+									console.log("Successfully updated info and resume for " + req.body.netid);
+									res.send("Successfully updated info and resume!");
+								}
+							});
 						}
 					}
 				});
@@ -88,6 +87,21 @@ router.post('/students', studentResumeField, function (req, res, next) {
 		}
 	});
 });
+
+/* Helper method for interacting with Mongo and AWS in POST /students */
+var updateInfoAndResume = function (req, callback) {
+	// TODO: change
+	// Bucket name is founders-resumes
+	console.log("firstname:", req.body.firstname);
+	console.log("lastname:", req.body.lastname);
+	console.log("netid:", req.body.netid);
+	console.log("gradyear:", req.body.gradyear);
+	console.log("level:", req.body.level);
+	console.log("lookingfor:", req.body.lookingfor);
+	// Resume file as a buffer
+	console.log("req.file:", req.file);
+	callback();
+};
 
 router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page' });
