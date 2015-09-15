@@ -3,7 +3,18 @@ var passport = require('passport');
 var Employer = require('../models/employer');
 var router = express.Router();
 
+var multer = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({
+	limits: { fileSize: 512*1024 }, // limit resumes to 512 kb
+	storage: storage
+});
+
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+
 var passport = require('passport');
+var UIUCID = require('illinois-directory');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -12,6 +23,33 @@ router.get('/', function (req, res, next) {
 
 router.get('/students', function(req, res, next){
 	res.render('student-submission', {title: 'Student Resume Drop' });
+});
+
+// STUDENT SUBMISSION METHOD
+var studentResumeField = upload.single('resume');
+router.post('/students', studentResumeField, function (req, res, next) {
+	// verify net ID exists, and against first and last name
+	UIUCID(req.body.netid, function (err, details) {
+		if (err) {
+			console.log(req.body.netid + " not found");
+			res.status(400).send("NetID not found.");
+		} else {
+			if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
+				(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
+				res.status(400).send("First name or last name doesn't match Illinois directory records.");
+			} else {
+				console.log("firstname:", req.body.firstname);
+				console.log("lastname:", req.body.lastname);
+				console.log("netid:", req.body.netid);
+				console.log("gradyear:", req.body.gradyear);
+				console.log("level:", req.body.level);
+				console.log("lookingfor:", req.body.lookingfor);
+				// Resume file as a buffer
+				console.log("req.file:", req.file);
+				res.send("OK!");
+			}
+		}
+	});
 });
 
 router.get('/employers', function (req, res, next) {
