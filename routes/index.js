@@ -1,7 +1,18 @@
 var express = require('express');
+var request = require('request');
 var passport = require('passport');
 var Employer = require('../models/employer');
 var router = express.Router();
+
+// config
+var config = {};
+if (process.env.G_RECAPTCHA_SECRET) {
+	// production
+	config.G_RECAPTCHA_SECRET = process.env.G_RECAPTCHA_SECRET;
+} else {
+	// development
+	config = require('../config');
+}
 
 var multer = require('multer');
 var storage = multer.memoryStorage();
@@ -11,6 +22,12 @@ var upload = multer({
 });
 
 var AWS = require('aws-sdk');
+if (!process.env.AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
+	// For development environment
+	// IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
+	var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
+	AWS.config.credentials = credentials;
+}
 var s3 = new AWS.S3();
 
 var passport = require('passport');
@@ -28,25 +45,45 @@ router.get('/students', function(req, res, next){
 // STUDENT SUBMISSION METHOD
 var studentResumeField = upload.single('resume');
 router.post('/students', studentResumeField, function (req, res, next) {
-	// verify net ID exists, and against first and last name
-	UIUCID(req.body.netid, function (err, details) {
+	// first verify recaptcha
+	var grRes = req.body["g-recaptcha-response"];
+	var url = "https://www.google.com/recaptcha/api/siteverify?secret=" + config.G_RECAPTCHA_SECRET + "&response=" + grRes + "&remoteip=" + req.connection.remoteAddress;
+	request.post(url, function (err, httpResponse, body) {
 		if (err) {
-			console.log(req.body.netid + " not found");
-			res.status(400).send("NetID not found.");
+			res.status(500).send("Error in processing recaptcha: " + err);
 		} else {
-			if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
-				(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
-				res.status(400).send("First name or last name doesn't match Illinois directory records.");
+			// check if success
+			var grServerRes = JSON.parse(body);
+			if (grServerRes.success) {
+				// success
+				// verify net ID exists, and against first and last name
+				UIUCID(req.body.netid, function (err, details) {
+					if (err) {
+						console.log(req.body.netid + " not found");
+						res.status(400).send("NetID not found.");
+					} else {
+						if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
+							(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
+							res.status(400).send("First name or last name doesn't match Illinois directory records.");
+						} else {
+							// TODO: change
+							console.log("firstname:", req.body.firstname);
+							console.log("lastname:", req.body.lastname);
+							console.log("netid:", req.body.netid);
+							console.log("gradyear:", req.body.gradyear);
+							console.log("level:", req.body.level);
+							console.log("lookingfor:", req.body.lookingfor);
+							// Resume file as a buffer
+							console.log("req.file:", req.file);
+							res.send("OK!");
+						}
+					}
+				});
 			} else {
-				console.log("firstname:", req.body.firstname);
-				console.log("lastname:", req.body.lastname);
-				console.log("netid:", req.body.netid);
-				console.log("gradyear:", req.body.gradyear);
-				console.log("level:", req.body.level);
-				console.log("lookingfor:", req.body.lookingfor);
-				// Resume file as a buffer
-				console.log("req.file:", req.file);
-				res.send("OK!");
+				// failure
+				var errorCodes = grServerRes["error-codes"];
+				console.log("User at " + req.connection.remoteAddress + " failed recaptcha: " + errorCodes);
+				res.status(400).send("Resume submission failed. Error codes: " + errorCodes);
 			}
 		}
 	});

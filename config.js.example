@@ -1,0 +1,5 @@
+var config = {};
+
+config.G_RECAPTCHA_SECRET = "<insert Google Recaptcha secret key here>";
+
+module.exports = config;
