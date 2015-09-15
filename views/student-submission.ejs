@@ -5,16 +5,16 @@
 	</head>
 	<body>
 		<h1><%= title %></h1>
-		<form name="student-submission" enctype="multipart/form-data" method="post" action="/students" >
-			<label for="name">First</label>
-			<input type="text" name="first" placeholder="First" required> <br>
-			<label for="last">Last</label>
-			<input type="text" name="last" placeholder="Last" required> <br>
-			<label for="netid">Netid</label>
+		<form name="student-submission" enctype="multipart/form-data" method="post" action="/students">
+			<label for="firstname">First Name</label>
+			<input type="text" name="firstname" placeholder="First" required> <br>
+			<label for="lastname">Last Name</label>
+			<input type="text" name="lastname" placeholder="Last" required> <br>
+			<label for="netid">NetID</label>
 			<input type="text" name="netid" placeholder="netid" required> <br>
 
 			<label for="gradyear">GradYear</label>
-			<select name="gradyear" id="">
+			<select name="gradyear" required>
 				<option value="2015">2015</option>
 				<option value="2016">2016</option>
 				<option value="2017">2017</option>
@@ -23,7 +23,7 @@
 			</select> <br>
 
 			<label for="level"> Level </label>
-			<select name="level" id="">
+			<select name="level" required>
 				<option value="undergrad">Undergraduate</option>
 				<option value="masters">Master's</option>
 				<option value="phd">PhD</option>
@@ -31,13 +31,14 @@
 
 			<!-- looking for -->
 			Looking for <br>
-			<input type="radio" name="lookingfor" value="fulltime"> Fulltime
-			<input type="radio" name="lookingfor" value="internship"> Internship
+			<input type="radio" name="lookingfor" value="fulltime" required> Fulltime
+			<input type="radio" name="lookingfor" value="internship" required> Internship
 			<br>
 			<!-- file upload -->
 			Resume <br>
-			<input type="file" name="resume" id="resume"> 
+			<input type="file" name="resume" id="resume" required> 
 			<br>
+			<!-- TODO: put recaptcha here -->
 			<input type="submit">
 		</form>
 	</body>

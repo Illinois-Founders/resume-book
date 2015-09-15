@@ -10,7 +10,11 @@ var upload = multer({
 	storage: storage
 });
 
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+
 var passport = require('passport');
+var UIUCID = require('illinois-directory');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -24,15 +28,28 @@ router.get('/students', function(req, res, next){
 // STUDENT SUBMISSION METHOD
 var studentResumeField = upload.single('resume');
 router.post('/students', studentResumeField, function (req, res, next) {
-	console.log("first:", req.body.first);
-	console.log("last:", req.body.first);
-	console.log("netid:", req.body.netid);
-	console.log("gradyear:", req.body.gradyear);
-	console.log("level:", req.body.level);
-	console.log("lookingfor:", req.body.lookingfor);
-	// Resume file as a buffer
-	console.log("req.file:", req.file);
-	res.redirect('/students');
+	// verify net ID exists, and against first and last name
+	UIUCID(req.body.netid, function (err, details) {
+		if (err) {
+			console.log(req.body.netid + " not found");
+			res.status(400).send("NetID not found");
+		} else {
+			if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
+				(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
+				res.status(400).send("First name or last name doesn't match Illinois directory");
+			} else {
+				console.log("firstname:", req.body.firstname);
+				console.log("lastname:", req.body.lastname);
+				console.log("netid:", req.body.netid);
+				console.log("gradyear:", req.body.gradyear);
+				console.log("level:", req.body.level);
+				console.log("lookingfor:", req.body.lookingfor);
+				// Resume file as a buffer
+				console.log("req.file:", req.file);
+				res.send("OK!");
+			}
+		}
+	});
 });
 
 router.get('/employers', function (req, res, next) {
