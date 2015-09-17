@@ -21,7 +21,7 @@ passport.serializeUser(Employer.serializeUser());
 passport.deserializeUser(Employer.deserializeUser());
 
 // MONGOOSE CONNECTION
-mongoose.connect('mongodb://localhost:27017/founders-employers');
+mongoose.connect('mongodb://localhost:27017/founders-resume-book');
 
 var app = express();
 

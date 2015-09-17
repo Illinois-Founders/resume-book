@@ -2,6 +2,8 @@
 <html>
 	<head>
 		<% include partials/template/head.ejs %>
+		<!-- recaptcha script -->
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
@@ -36,9 +38,10 @@
 			<br>
 			<!-- file upload -->
 			Resume <br>
-			<input type="file" name="resume" id="resume" required> 
+			<input type="file" name="resume" id="resume" accept="application/pdf" required> 
 			<br>
-			<!-- TODO: put recaptcha here -->
+			<!-- recaptcha -->
+			<div class="g-recaptcha" data-sitekey="6Ldd5QwTAAAAAMSexsZ01_CkruFc8BItFDxZVq-H"></div>
 			<input type="submit">
 		</form>
 	</body>
