@@ -8,11 +8,11 @@ var studentSchema = new Schema({
   gradyear: { type: String },
   seeking: { type: String },
   level: { type: String },
-  created_at: { type: Date, default: Date.now }, 
   updated_at: { type: Date, default: Date.now }
 });
 
 // resume URL is at https://founders-resumes.s3.amazonaws.com/{netid}.pdf
+// created_at timestamp can be retrieved using _id: ObjectId(_id).getTimestamp()
 
 var student = mongoose.model('Student', studentSchema);
 

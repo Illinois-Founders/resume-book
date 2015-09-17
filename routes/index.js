@@ -30,8 +30,7 @@ if (!process.env.AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
 	// IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
 	var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
 	AWS.config.credentials = credentials;
-	console.log("Credentials:"); //DEBUG
-	console.log(credentials); //DEBUG
+	console.log("Credentials:", credentials); //DEBUG
 }
 var s3 = new AWS.S3();
 
@@ -138,12 +137,13 @@ var updateInfoAndResume = function (req, callback) {
 				callback("There was an error updating your info.");
 			} else {
 				console.log("Successfully updated info for " + req.body.netid);
-				console.log(rawResponse); //DEBUG
 				// update resume
 				var params = {
 					Bucket: "founders-resumes",
 					Key: req.body.netid + ".pdf", // resume filename can be inferred
-					Body: req.file.buffer
+					Body: req.file.buffer,
+					ACL: 'public-read',
+					ContentType: 'application/pdf'
 				};
 				s3.putObject(params, function (err) {
 					if (err) {
