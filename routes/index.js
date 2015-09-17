@@ -1,10 +1,11 @@
 var express = require('express');
 var request = require('request');
 var passport = require('passport');
+var Student = require('../models/student');
 var Employer = require('../models/employer');
 var router = express.Router();
 
-// config
+// environment variables config
 var config = {};
 if (process.env.G_RECAPTCHA_SECRET) {
 	// production
@@ -14,6 +15,7 @@ if (process.env.G_RECAPTCHA_SECRET) {
 	config = require('../config');
 }
 
+// multer config
 var multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({
@@ -21,15 +23,23 @@ var upload = multer({
 	storage: storage
 });
 
+// AWS S3 config
 var AWS = require('aws-sdk');
 if (!process.env.AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
 	// For development environment
 	// IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
 	var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
 	AWS.config.credentials = credentials;
+	console.log("Credentials:"); //DEBUG
+	console.log(credentials); //DEBUG
 }
 var s3 = new AWS.S3();
 
+// mongoose config
+var mongoose = require('mongoose');
+var db = mongoose.connection;
+
+// misc requires
 var passport = require('passport');
 var UIUCID = require('illinois-directory');
 
@@ -108,7 +118,44 @@ var updateInfoAndResume = function (req, callback) {
 		console.log("lookingfor:", req.body.lookingfor);
 		// Resume file as a buffer
 		console.log("req.file:", req.file);
-		callback();
+
+		// create updated info object and query
+		var updatedInfo = {
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			netid: req.body.netid,
+			gradyear: req.body.gradyear,
+			seeking: req.body.lookingfor,
+			level: req.body.level,
+			updated_at: new Date()
+		};
+		var queryInfo = {netid: req.body.netid};
+		var options = {upsert: true, multi: false};
+		// add info if not exists, else update info
+		Student.update(queryInfo, updatedInfo, options, function (err, rawResponse) {
+			if (err) {
+				console.log("Error updating info for " + req.body.netid + ": " + err);
+				callback("There was an error updating your info.");
+			} else {
+				console.log("Successfully updated info for " + req.body.netid);
+				console.log(rawResponse); //DEBUG
+				// update resume
+				var params = {
+					Bucket: "founders-resumes",
+					Key: req.body.netid + ".pdf", // resume filename can be inferred
+					Body: req.file.buffer
+				};
+				s3.putObject(params, function (err) {
+					if (err) {
+						console.log("Error uploading resume for " + req.body.netid + ": " + err);
+						callback("There was an error uploading your resume.");
+					} else {
+						console.log("Successfully uploaded resume for " + req.body.netid);
+						callback();
+					}
+				});
+			}
+		});
 	}
 };
 
