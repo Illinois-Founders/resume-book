@@ -69,7 +69,7 @@ router.post('/students', studentResumeField, function (req, res, next) {
 							updateInfoAndResume(req, function (error) {
 								if (error) {
 									console.log("Error while updating info and resume for " + req.body.netid);
-									res.status(500).send("Error while updating info and resume. Try again.");
+									res.status(500).send(error);
 								} else {
 									console.log("Successfully updated info and resume for " + req.body.netid);
 									res.send("Successfully updated info and resume!");
@@ -91,16 +91,25 @@ router.post('/students', studentResumeField, function (req, res, next) {
 /* Helper method for interacting with Mongo and AWS in POST /students */
 var updateInfoAndResume = function (req, callback) {
 	// TODO: change
-	// Bucket name is founders-resumes
-	console.log("firstname:", req.body.firstname);
-	console.log("lastname:", req.body.lastname);
-	console.log("netid:", req.body.netid);
-	console.log("gradyear:", req.body.gradyear);
-	console.log("level:", req.body.level);
-	console.log("lookingfor:", req.body.lookingfor);
-	// Resume file as a buffer
-	console.log("req.file:", req.file);
-	callback();
+	// restrict req.file.mimetype to application/pdf
+	if (!req.file) {
+		console.log("req.file is not a resume");
+		callback("Resume was not provided. Try again.");
+	} else if (!req.file.mimetype !== "application/pdf") {
+		console.log("Resume is not a PDF file");
+		callback("Resume should be a PDF file. Try again.");
+	} else {
+		// Bucket name is founders-resumes
+		console.log("firstname:", req.body.firstname);
+		console.log("lastname:", req.body.lastname);
+		console.log("netid:", req.body.netid);
+		console.log("gradyear:", req.body.gradyear);
+		console.log("level:", req.body.level);
+		console.log("lookingfor:", req.body.lookingfor);
+		// Resume file as a buffer
+		console.log("req.file:", req.file);
+		callback();
+	}
 };
 
 router.get('/employers', function (req, res, next) {
