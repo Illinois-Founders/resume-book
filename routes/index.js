@@ -95,7 +95,7 @@ var updateInfoAndResume = function (req, callback) {
 	if (!req.file) {
 		console.log("req.file is not a resume");
 		callback("Resume was not provided. Try again.");
-	} else if (!req.file.mimetype !== "application/pdf") {
+	} else if (req.file.mimetype !== "application/pdf") {
 		console.log("Resume is not a PDF file");
 		callback("Resume should be a PDF file. Try again.");
 	} else {
