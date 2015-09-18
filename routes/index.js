@@ -109,14 +109,14 @@ var updateInfoAndResume = function (req, callback) {
 		callback("Resume should be a PDF file. Try again.");
 	} else {
 		// Bucket name is founders-resumes
-		console.log("firstname:", req.body.firstname);
-		console.log("lastname:", req.body.lastname);
-		console.log("netid:", req.body.netid);
-		console.log("gradyear:", req.body.gradyear);
-		console.log("level:", req.body.level);
-		console.log("lookingfor:", req.body.lookingfor);
+		// console.log("firstname:", req.body.firstname);
+		// console.log("lastname:", req.body.lastname);
+		// console.log("netid:", req.body.netid);
+		// console.log("gradyear:", req.body.gradyear);
+		// console.log("level:", req.body.level);
+		// console.log("lookingfor:", req.body.lookingfor);
 		// Resume file as a buffer
-		console.log("req.file:", req.file);
+		// console.log("req.file:", req.file);
 
 		// create updated info object and query
 		var updatedInfo = {
