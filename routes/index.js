@@ -120,8 +120,8 @@ var updateInfoAndResume = function (req, callback) {
 
 		// create updated info object and query
 		var updatedInfo = {
-			firstname: req.body.firstname,
-			lastname: req.body.lastname,
+			firstname: req.body.firstname.toLowerCase(),
+			lastname: req.body.lastname.toLowerCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
 			seeking: req.body.lookingfor,
