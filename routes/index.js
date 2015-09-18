@@ -159,6 +159,30 @@ var updateInfoAndResume = function (req, callback) {
 	}
 };
 
+/* API method for getting students */
+router.get('/students/search', function (req, res, next) {{
+	// TODO: ensure authentication?
+	// TODO: sorting
+	// construct query
+	var query = {};
+	if (req.query.firstname) query.firstname = req.query.firstname.toLowerCase();
+	if (req.query.lastname) query.lastname = req.query.lastname.toLowerCase();
+	if (req.query.netid) query.netid = req.query.netid;
+	if (req.query["gradyear[]"]) query["$elemMatch"].gradyear = req.query["gradyear[]"]; // allow querying for multiple grad years
+	if (req.query["lookingfor[]"]) query["$elemMatch"].seeking = req.query["lookingfor[]"]; // allow querying for multiple seekings
+	if (req.query["level[]"]) query["$elemMatch"].level = req.query["level[]"]; // allow querying for multiple levels
+	// pagination is front end's responsibility
+	// firstname and lastname searches are case insensitive
+	Student.find(query, function (err, docs) {
+		if (err) {
+			res.status(500).send("Error fetching results from database.");
+		} else {
+			console.log("Got docs!");
+			res.send(docs);
+		}
+	});
+});
+
 router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page' });
 });
