@@ -4,8 +4,8 @@ var EmployerDashboard = React.createClass({
 	getInitialState: function () {
 		return {results: []};
 	},
-	handleSearch: function (data) {
-		return data;
+	completeSearch: function (data) {
+		this.setState({results: data});
 	},
 	render: function () {
 		return (
@@ -54,10 +54,9 @@ var SearchFields = React.createClass({
 		if (level.length > 0) formData.level = level;
 
 		// call API
-		console.log(formData);
 		$.getJSON("/students/search?", formData, function (data) {
-			console.log(data);
-		});
+			this.props.onCompleteSearch(data);
+		}.bind(this));
 	},
 	render: function () {
 		return (
