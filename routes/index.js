@@ -153,8 +153,9 @@ var updateInfoAndResume = function (req, callback) {
 
 /* API method for getting students */
 router.get('/students/search', function (req, res, next) {
+	// 1. pagination is front end's responsibility
+	// 2. firstname and lastname searches are case insensitive
 	// TODO: ensure authentication?
-	// TODO: sorting
 	// construct query
 	var query = {};
 	if (req.query.firstname) query.firstname_search = new RegExp(req.query.firstname.toUpperCase());
@@ -172,9 +173,9 @@ router.get('/students/search', function (req, res, next) {
 		query.level = {};
 		query.level["$in"] = req.query.level; // allow querying for multiple levels
 	}
-	// pagination is front end's responsibility
-	// firstname and lastname searches are case insensitive
-	Student.find(query, '-_id firstname lastname netid gradyear seeking level', function (err, docs) {
+	// sort
+	var sort = req.query.sort || null;
+	Student.find(query, '-_id firstname lastname netid gradyear seeking level', {sort: sort}, function (err, docs) {
 		if (err) {
 			res.status(500).send("Error fetching results from database.");
 		} else {
