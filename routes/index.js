@@ -160,7 +160,7 @@ var updateInfoAndResume = function (req, callback) {
 };
 
 /* API method for getting students */
-router.get('/students/search', function (req, res, next) {{
+router.get('/students/search', function (req, res, next) {
 	// TODO: ensure authentication?
 	// TODO: sorting
 	// construct query
@@ -168,16 +168,30 @@ router.get('/students/search', function (req, res, next) {{
 	if (req.query.firstname) query.firstname = req.query.firstname.toLowerCase();
 	if (req.query.lastname) query.lastname = req.query.lastname.toLowerCase();
 	if (req.query.netid) query.netid = req.query.netid;
-	if (req.query["gradyear[]"]) query["$elemMatch"].gradyear = req.query["gradyear[]"]; // allow querying for multiple grad years
-	if (req.query["lookingfor[]"]) query["$elemMatch"].seeking = req.query["lookingfor[]"]; // allow querying for multiple seekings
-	if (req.query["level[]"]) query["$elemMatch"].level = req.query["level[]"]; // allow querying for multiple levels
+	if (req.query.gradyear) {
+		query.gradyear = {};
+		query.gradyear["$in"] = req.query.gradyear; // allow querying for multiple grad years
+	}
+	if (req.query.lookingfor) {
+		query.seeking = {};
+		query.seeking["$in"] = req.query.lookingfor; // allow querying for multiple seekings
+	}
+	if (req.query.level) {
+		query.level = {};
+		query.level["$in"] = req.query.level; // allow querying for multiple levels
+	}
+	console.log(query);
 	// pagination is front end's responsibility
 	// firstname and lastname searches are case insensitive
 	Student.find(query, function (err, docs) {
 		if (err) {
+			console.log(err);
 			res.status(500).send("Error fetching results from database.");
 		} else {
-			console.log("Got docs!");
+			// no cache
+			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+			res.header('Expires', '-1');
+			res.header('Pragma', 'no-cache');
 			res.send(docs);
 		}
 	});
