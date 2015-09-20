@@ -116,17 +116,30 @@ var SearchFields = React.createClass({
 	}
 });
 
+var seekingDict = {
+	"fulltime": "Full Time",
+	"internship": "Internship"
+};
+
+var levelDict = {
+	"undergrad": "Undergraduate",
+	"masters": "Master's",
+	"phd": "PhD"
+};
+
 var ResultsRow = React.createClass({
 	render: function () {
 		var email = this.props.student.netid + "@illinois.edu";
 		var resumeLink = "https://founders-resumes.s3.amazonaws.com/" + this.props.student.netid + ".pdf";
+		var seeking = seekingDict[this.props.student.seeking] || this.props.student.seeking;
+		var level = levelDict[this.props.student.level] || this.props.student.level;
 		return (
 		<tr>
 			<td>{this.props.student.firstname} {this.props.student.lastname}</td>
 			<td><a href={"mailto:" + email}>{email}</a></td>
-			<td>{this.props.student.seeking}</td>
+			<td>{seeking}</td>
 			<td>{this.props.student.gradyear}</td>
-			<td>{this.props.student.level}</td>
+			<td>{level}</td>
 			<td><a href={resumeLink}><i className="fa fa-external-link"></i></a></td>
 		</tr>
 		);
