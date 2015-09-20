@@ -140,7 +140,7 @@ var ResultsRow = React.createClass({
 			<td>{seeking}</td>
 			<td>{this.props.student.gradyear}</td>
 			<td>{level}</td>
-			<td><a href={resumeLink}><i className="fa fa-external-link"></i></a></td>
+			<td><a target="_blank" href={resumeLink}><i className="fa fa-external-link"></i></a></td>
 		</tr>
 		);
 	}
