@@ -5,15 +5,17 @@ var EmployerDashboard = React.createClass({
 		return (
 		<div>
 			<SearchFields />
+			<ResultsTable/>
 		</div>
 		);
 	}
 });
 
 var SearchFields = React.createClass({
+	// uncontrolled
 	render: function () {
 		return (
-		<form name="student-search-fields">
+		<form id="student-search-fields" method="get">
 			<label htmlFor="firstname">First Name</label>
 			<input type="text" name="firstname" placeholder="First Name" /><br/>
 			<label htmlFor="lastname">Last Name</label>
@@ -39,8 +41,16 @@ var SearchFields = React.createClass({
 			<input type="checkbox" name="level[]" value="masters" /> Master's
 			<input type="checkbox" name="level[]" value="phd" /> PhD
 			<br/>
+
+			<input type="submit" value="Search" />
 		</form>
 		);
+	}
+});
+
+var ResultsTable = React.createClass({
+	render: function () {
+		return (<p>yay</p>);
 	}
 });
 
