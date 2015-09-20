@@ -109,19 +109,19 @@ var updateInfoAndResume = function (req, callback) {
 		callback("Resume should be a PDF file. Try again.");
 	} else {
 		// Bucket name is founders-resumes
-		console.log("firstname:", req.body.firstname);
-		console.log("lastname:", req.body.lastname);
-		console.log("netid:", req.body.netid);
-		console.log("gradyear:", req.body.gradyear);
-		console.log("level:", req.body.level);
-		console.log("lookingfor:", req.body.lookingfor);
+		// console.log("firstname:", req.body.firstname);
+		// console.log("lastname:", req.body.lastname);
+		// console.log("netid:", req.body.netid);
+		// console.log("gradyear:", req.body.gradyear);
+		// console.log("level:", req.body.level);
+		// console.log("lookingfor:", req.body.lookingfor);
 		// Resume file as a buffer
-		console.log("req.file:", req.file);
+		// console.log("req.file:", req.file);
 
 		// create updated info object and query
 		var updatedInfo = {
-			firstname: req.body.firstname,
-			lastname: req.body.lastname,
+			firstname: req.body.firstname.toLowerCase(),
+			lastname: req.body.lastname.toLowerCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
 			seeking: req.body.lookingfor,
@@ -158,6 +158,44 @@ var updateInfoAndResume = function (req, callback) {
 		});
 	}
 };
+
+/* API method for getting students */
+router.get('/students/search', function (req, res, next) {
+	// TODO: ensure authentication?
+	// TODO: sorting
+	// construct query
+	var query = {};
+	if (req.query.firstname) query.firstname = req.query.firstname.toLowerCase();
+	if (req.query.lastname) query.lastname = req.query.lastname.toLowerCase();
+	if (req.query.netid) query.netid = req.query.netid;
+	if (req.query.gradyear) {
+		query.gradyear = {};
+		query.gradyear["$in"] = req.query.gradyear; // allow querying for multiple grad years
+	}
+	if (req.query.lookingfor) {
+		query.seeking = {};
+		query.seeking["$in"] = req.query.lookingfor; // allow querying for multiple seekings
+	}
+	if (req.query.level) {
+		query.level = {};
+		query.level["$in"] = req.query.level; // allow querying for multiple levels
+	}
+	console.log(query);
+	// pagination is front end's responsibility
+	// firstname and lastname searches are case insensitive
+	Student.find(query, function (err, docs) {
+		if (err) {
+			console.log(err);
+			res.status(500).send("Error fetching results from database.");
+		} else {
+			// no cache
+			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+			res.header('Expires', '-1');
+			res.header('Pragma', 'no-cache');
+			res.send(docs);
+		}
+	});
+});
 
 router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page' });
