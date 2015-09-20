@@ -2,10 +2,15 @@
 <html>
 	<head>
 		<% include partials/template/head.ejs %>
+		<!-- JSX Stuff -->
+		<script src="/components/react/react.min.js"></script>
+		<script src="/components/react/JSXTransformer.js"></script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
-		<p>Employer view goes here</p>
-	</body>
+		<div id="employer-dashboard"></div>
 
+		<!-- React -->
+		<script type="text/jsx" src="/javascripts/employer-view.jsx"></script>
+	</body>
 </html>

@@ -213,7 +213,7 @@ router.post('/employers', passport.authenticate('local'), function (req, res, ne
 
 router.get('/employers/dashboard', function (req, res) {
 	// TODO: ensure logged in, then view dashboard
-	res.render('employer-view', {title: 'Employers Dashboard'});
+	res.render('employer-view', {title: "Employers' Dashboard"});
 });
 
 // EMPLOYER LOGOUT METHOD
