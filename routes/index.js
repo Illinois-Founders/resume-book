@@ -174,7 +174,7 @@ router.get('/students/search', function (req, res, next) {
 	}
 	// pagination is front end's responsibility
 	// firstname and lastname searches are case insensitive
-	Student.find(query, function (err, docs) {
+	Student.find(query, '-_id firstname lastname netid gradyear seeking level', function (err, docs) {
 		if (err) {
 			res.status(500).send("Error fetching results from database.");
 		} else {
