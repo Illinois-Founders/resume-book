@@ -4,6 +4,8 @@ var Schema = mongoose.Schema;
 var studentSchema = new Schema({
   firstname: { type: String, required: true, unique: false },
   lastname: { type: String, required: true, unique: false },
+  firstname_search: { type: String, required: true, unique: false },
+  lastname_search: { type: String, required: true, unique: false },
   netid: { type: String, required: true, unique: true },
   gradyear: { type: String },
   seeking: { type: String },

@@ -110,8 +110,10 @@ var updateInfoAndResume = function (req, callback) {
 		// Bucket name is founders-resumes
 		// create updated info object and query
 		var updatedInfo = {
-			firstname: req.body.firstname.toLowerCase(),
-			lastname: req.body.lastname.toLowerCase(),
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			firstname_search: req.body.firstname.toUpperCase(),
+			lastname_search: req.body.lastname.toUpperCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
 			seeking: req.body.lookingfor,
@@ -155,8 +157,8 @@ router.get('/students/search', function (req, res, next) {
 	// TODO: sorting
 	// construct query
 	var query = {};
-	if (req.query.firstname) query.firstname = req.query.firstname.toLowerCase();
-	if (req.query.lastname) query.lastname = req.query.lastname.toLowerCase();
+	if (req.query.firstname) query.firstname_search = new RegExp(req.query.firstname.toUpperCase());
+	if (req.query.lastname) query.lastname_search = new RegExp(req.query.lastname.toUpperCase());
 	if (req.query.netid) query.netid = req.query.netid;
 	if (req.query.gradyear) {
 		query.gradyear = {};
