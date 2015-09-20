@@ -118,13 +118,16 @@ var SearchFields = React.createClass({
 
 var ResultsRow = React.createClass({
 	render: function () {
+		var email = this.props.student.netid + "@illinois.edu";
+		var resumeLink = "https://founders-resumes.s3.amazonaws.com/" + this.props.student.netid + ".pdf";
 		return (
 		<tr>
 			<td>{this.props.student.firstname} {this.props.student.lastname}</td>
-			<td>{this.props.student.netid}@illinois.edu</td>
+			<td><a href={"mailto:" + email}>{email}</a></td>
 			<td>{this.props.student.seeking}</td>
 			<td>{this.props.student.gradyear}</td>
 			<td>{this.props.student.level}</td>
+			<td><a href={resumeLink}><i className="fa fa-external-link"></i></a></td>
 		</tr>
 		);
 	}
@@ -145,6 +148,7 @@ var ResultsTable = React.createClass({
 					<th>Seeking</th>
 					<th>Grad Year</th>
 					<th>Level</th>
+					<th>Link to Resume</th>
 				</tr>
 			</thead>
 			<tbody>
