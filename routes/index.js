@@ -99,7 +99,6 @@ router.post('/students', studentResumeField, function (req, res, next) {
 
 /* Helper method for interacting with Mongo and AWS in POST /students */
 var updateInfoAndResume = function (req, callback) {
-	// TODO: change
 	// restrict req.file.mimetype to application/pdf
 	if (!req.file) {
 		console.log("req.file is not a resume");
@@ -109,19 +108,12 @@ var updateInfoAndResume = function (req, callback) {
 		callback("Resume should be a PDF file. Try again.");
 	} else {
 		// Bucket name is founders-resumes
-		// console.log("firstname:", req.body.firstname);
-		// console.log("lastname:", req.body.lastname);
-		// console.log("netid:", req.body.netid);
-		// console.log("gradyear:", req.body.gradyear);
-		// console.log("level:", req.body.level);
-		// console.log("lookingfor:", req.body.lookingfor);
-		// Resume file as a buffer
-		// console.log("req.file:", req.file);
-
 		// create updated info object and query
 		var updatedInfo = {
-			firstname: req.body.firstname.toLowerCase(),
-			lastname: req.body.lastname.toLowerCase(),
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			firstname_search: req.body.firstname.toUpperCase(),
+			lastname_search: req.body.lastname.toUpperCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
 			seeking: req.body.lookingfor,
@@ -161,12 +153,13 @@ var updateInfoAndResume = function (req, callback) {
 
 /* API method for getting students */
 router.get('/students/search', function (req, res, next) {
+	// 1. pagination is front end's responsibility
+	// 2. firstname and lastname searches are case insensitive
 	// TODO: ensure authentication?
-	// TODO: sorting
 	// construct query
 	var query = {};
-	if (req.query.firstname) query.firstname = req.query.firstname.toLowerCase();
-	if (req.query.lastname) query.lastname = req.query.lastname.toLowerCase();
+	if (req.query.firstname) query.firstname_search = new RegExp(req.query.firstname.toUpperCase());
+	if (req.query.lastname) query.lastname_search = new RegExp(req.query.lastname.toUpperCase());
 	if (req.query.netid) query.netid = req.query.netid;
 	if (req.query.gradyear) {
 		query.gradyear = {};
@@ -180,12 +173,10 @@ router.get('/students/search', function (req, res, next) {
 		query.level = {};
 		query.level["$in"] = req.query.level; // allow querying for multiple levels
 	}
-	console.log(query);
-	// pagination is front end's responsibility
-	// firstname and lastname searches are case insensitive
-	Student.find(query, function (err, docs) {
+	// sort
+	var sort = req.query.sort || null;
+	Student.find(query, '-_id firstname lastname netid gradyear seeking level', {sort: sort}, function (err, docs) {
 		if (err) {
-			console.log(err);
 			res.status(500).send("Error fetching results from database.");
 		} else {
 			// no cache
@@ -224,7 +215,8 @@ router.post('/employers', passport.authenticate('local'), function (req, res, ne
 });
 
 router.get('/employers/dashboard', function (req, res) {
-	console.log("ensure logged in, then let employers view dashboard");
+	// TODO: ensure logged in, then view dashboard
+	res.render('employer-view', {title: "Employers' Dashboard"});
 });
 
 // EMPLOYER LOGOUT METHOD
