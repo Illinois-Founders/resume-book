@@ -166,6 +166,10 @@ router.get('/students/search', function (req, res, next) {
 		query.gradyear = {};
 		query.gradyear["$in"] = req.query.gradyear; // allow querying for multiple grad years
 	}
+	if (req.query.major) {
+		query.major = {};
+		query.major["$in"] = req.query.major; // allow querying for multiple majors
+	}
 	if (req.query.lookingfor) {
 		query.seeking = {};
 		query.seeking["$in"] = req.query.lookingfor; // allow querying for multiple seekings
@@ -176,7 +180,7 @@ router.get('/students/search', function (req, res, next) {
 	}
 	// sort
 	var sort = req.query.sort || null;
-	Student.find(query, '-_id firstname lastname netid gradyear seeking level', {sort: sort}, function (err, docs) {
+	Student.find(query, '-_id firstname lastname netid gradyear major seeking level', {sort: sort}, function (err, docs) {
 		if (err) {
 			res.status(500).send("Error fetching results from database.");
 		} else {
