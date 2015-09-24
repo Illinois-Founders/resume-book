@@ -8,8 +8,9 @@ var studentSchema = new Schema({
   lastname_search: { type: String, required: true, unique: false },
   netid: { type: String, required: true, unique: true },
   gradyear: { type: String },
-  seeking: { type: String },
+  major: { type: String },
   level: { type: String },
+  seeking: { type: String },
   updated_at: { type: Date, default: Date.now }
 });
 

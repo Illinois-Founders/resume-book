@@ -116,8 +116,9 @@ var updateInfoAndResume = function (req, callback) {
 			lastname_search: req.body.lastname.toUpperCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
-			seeking: req.body.lookingfor,
+			major: req.body.major,
 			level: req.body.level,
+			seeking: req.body.lookingfor,
 			updated_at: new Date()
 		};
 		var queryInfo = {netid: req.body.netid};
