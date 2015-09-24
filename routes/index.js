@@ -116,8 +116,9 @@ var updateInfoAndResume = function (req, callback) {
 			lastname_search: req.body.lastname.toUpperCase(),
 			netid: req.body.netid,
 			gradyear: req.body.gradyear,
-			seeking: req.body.lookingfor,
+			major: req.body.major,
 			level: req.body.level,
+			seeking: req.body.seeking,
 			updated_at: new Date()
 		};
 		var queryInfo = {netid: req.body.netid};
@@ -165,9 +166,13 @@ router.get('/students/search', function (req, res, next) {
 		query.gradyear = {};
 		query.gradyear["$in"] = req.query.gradyear; // allow querying for multiple grad years
 	}
-	if (req.query.lookingfor) {
+	if (req.query.major) {
+		query.major = {};
+		query.major["$in"] = req.query.major; // allow querying for multiple majors
+	}
+	if (req.query.seeking) {
 		query.seeking = {};
-		query.seeking["$in"] = req.query.lookingfor; // allow querying for multiple seekings
+		query.seeking["$in"] = req.query.seeking; // allow querying for multiple seekings
 	}
 	if (req.query.level) {
 		query.level = {};
@@ -175,7 +180,7 @@ router.get('/students/search', function (req, res, next) {
 	}
 	// sort
 	var sort = req.query.sort || null;
-	Student.find(query, '-_id firstname lastname netid gradyear seeking level', {sort: sort}, function (err, docs) {
+	Student.find(query, '-_id firstname lastname netid gradyear major seeking level', {sort: sort}, function (err, docs) {
 		if (err) {
 			res.status(500).send("Error fetching results from database.");
 		} else {
