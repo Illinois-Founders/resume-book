@@ -50,10 +50,10 @@ var SearchFields = React.createClass({
 		}.bind(this));
 		if (major.length > 0) formData.major = major;
 
-		var lookingfor = [];
-		if (this.state.fulltime) lookingfor.push("fulltime");
-		if (this.state.internship) lookingfor.push("internship");
-		if (lookingfor.length > 0) formData.lookingfor = lookingfor;
+		var seeking = [];
+		if (this.state.fulltime) seeking.push("fulltime");
+		if (this.state.internship) seeking.push("internship");
+		if (seeking.length > 0) formData.seeking = seeking;
 
 		var level = [];
 		if (this.state.undergrad) level.push("undergrad");
@@ -112,9 +112,9 @@ var SearchFields = React.createClass({
 			<input type="checkbox" name="level[]" value="phd" checkedLink={this.linkState('phd')} /> PhD
 			<br/>
 
-			<label htmlFor="lookingfor">Looking for</label><br/>
-			<input type="checkbox" name="lookingfor[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
-			<input type="checkbox" name="lookingfor[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
+			<label htmlFor="seeking">Seeking</label><br/>
+			<input type="checkbox" name="seeking[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
+			<input type="checkbox" name="seeking[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
 			<br/>
 
 			<label htmlFor="sortby">Sort by</label>

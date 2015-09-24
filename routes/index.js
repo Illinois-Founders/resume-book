@@ -118,7 +118,7 @@ var updateInfoAndResume = function (req, callback) {
 			gradyear: req.body.gradyear,
 			major: req.body.major,
 			level: req.body.level,
-			seeking: req.body.lookingfor,
+			seeking: req.body.seeking,
 			updated_at: new Date()
 		};
 		var queryInfo = {netid: req.body.netid};
@@ -170,9 +170,9 @@ router.get('/students/search', function (req, res, next) {
 		query.major = {};
 		query.major["$in"] = req.query.major; // allow querying for multiple majors
 	}
-	if (req.query.lookingfor) {
+	if (req.query.seeking) {
 		query.seeking = {};
-		query.seeking["$in"] = req.query.lookingfor; // allow querying for multiple seekings
+		query.seeking["$in"] = req.query.seeking; // allow querying for multiple seekings
 	}
 	if (req.query.level) {
 		query.level = {};
