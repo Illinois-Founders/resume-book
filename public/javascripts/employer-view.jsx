@@ -44,6 +44,12 @@ var SearchFields = React.createClass({
 		}
 		if (gradyear.length > 0) formData.gradyear = gradyear;
 
+		var major = [];
+		Object.keys(majorDict).forEach(function (m) {
+			if (this.state[m]) major.push(m);
+		}.bind(this));
+		if (major.length > 0) formData.major = major;
+
 		var lookingfor = [];
 		if (this.state.fulltime) lookingfor.push("fulltime");
 		if (this.state.internship) lookingfor.push("internship");
@@ -82,15 +88,33 @@ var SearchFields = React.createClass({
 			<input type="checkbox" name="gradyear[]" value="2019" checkedLink={this.linkState('gradyear2019')} /> 2019
 			<br/>
 
-			<label htmlFor="lookingfor">Looking for</label><br/>
-			<input type="checkbox" name="lookingfor[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
-			<input type="checkbox" name="lookingfor[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
+			<label htmlFor="major">Major</label><br/>
+			<input type="checkbox" name="major[]" value="cs" checkedLink={this.linkState('cs')} /> Computer Science
+			<input type="checkbox" name="major[]" value="ce" checkedLink={this.linkState('ce')} /> Computer Engineering
+			<input type="checkbox" name="major[]" value="ee" checkedLink={this.linkState('ee')} /> Electrial Engineering
+			<input type="checkbox" name="major[]" value="ae" checkedLink={this.linkState('ae')} /> Aerospace Engineering
+			<input type="checkbox" name="major[]" value="age" checkedLink={this.linkState('age')} /> Agricultural Engineering
+			<input type="checkbox" name="major[]" value="bioe" checkedLink={this.linkState('bioe')} /> Bioengineering
+			<input type="checkbox" name="major[]" value="chem" checkedLink={this.linkState('chem')} /> Chemical Engineering
+			<input type="checkbox" name="major[]" value="cive" checkedLink={this.linkState('cive')} /> Civil Engineering
+			<input type="checkbox" name="major[]" value="phys" checkedLink={this.linkState('phys')} /> Engineering Physics
+			<input type="checkbox" name="major[]" value="ge" checkedLink={this.linkState('ge')} /> General Engineering
+			<input type="checkbox" name="major[]" value="ie" checkedLink={this.linkState('ie')} /> Industrial Engineering
+			<input type="checkbox" name="major[]" value="matse" checkedLink={this.linkState('matse')} /> Materials Science and Engineering
+			<input type="checkbox" name="major[]" value="me" checkedLink={this.linkState('me')} /> Mechanical Engineering
+			<input type="checkbox" name="major[]" value="npre" checkedLink={this.linkState('npre')} /> Nuclear Engineering
+			<input type="checkbox" name="major[]" value="noneng" checkedLink={this.linkState('noneng')} /> Other Major
 			<br/>
 
 			<label htmlFor="level">Level</label><br/>
 			<input type="checkbox" name="level[]" value="undergrad" checkedLink={this.linkState('undergrad')} /> Undergraduate
 			<input type="checkbox" name="level[]" value="masters" checkedLink={this.linkState('masters')} /> Master's
 			<input type="checkbox" name="level[]" value="phd" checkedLink={this.linkState('phd')} /> PhD
+			<br/>
+
+			<label htmlFor="lookingfor">Looking for</label><br/>
+			<input type="checkbox" name="lookingfor[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
+			<input type="checkbox" name="lookingfor[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
 			<br/>
 
 			<label htmlFor="sortby">Sort by</label>
@@ -100,6 +124,7 @@ var SearchFields = React.createClass({
 				<option value="lastname">Lastname</option>
 				<option value="netid">Email/NetID</option>
 				<option value="gradyear">Grad Year</option>
+				<option value="major">Major</option>
 				<option value="seeking">Looking for</option>
 				<option value="level">Level</option>
 			</select>
@@ -127,12 +152,31 @@ var levelDict = {
 	"phd": "PhD"
 };
 
+var majorDict = {
+	"cs": "Computer Science",
+	"ce": "Computer Engineering",
+	"ee": "Electrical Engineering",
+	"ae": "Aerospace Engineering",
+	"age": "Agricultural Engineering",
+	"bioe": "Bioengineering",
+	"chem": "Chemical Engineering",
+	"cive": "Civil Engineering",
+	"phys": "Engineering Physics",
+	"ge": "General Engineering",
+	"ie": "Industrial Engineering",
+	"matse": "Materials Science and Engineering",
+	"me": "Mechanical Engineering",
+	"npre": "Nuclear Engineering",
+	"noneng": "Other Major"
+};
+
 var ResultsRow = React.createClass({
 	render: function () {
 		var email = this.props.student.netid + "@illinois.edu";
 		var resumeLink = "https://founders-resumes.s3.amazonaws.com/" + this.props.student.netid + ".pdf";
 		var seeking = seekingDict[this.props.student.seeking] || this.props.student.seeking;
 		var level = levelDict[this.props.student.level] || this.props.student.level;
+		var major = majorDict[this.props.student.major] || this.props.student.major;
 		return (
 		<tr>
 			<td>{this.props.student.firstname} {this.props.student.lastname}</td>
@@ -140,6 +184,7 @@ var ResultsRow = React.createClass({
 			<td>{seeking}</td>
 			<td>{this.props.student.gradyear}</td>
 			<td>{level}</td>
+			<td>{major}</td>
 			<td><a target="_blank" href={resumeLink}><i className="fa fa-external-link"></i></a></td>
 		</tr>
 		);
@@ -161,6 +206,7 @@ var ResultsTable = React.createClass({
 					<th>Seeking</th>
 					<th>Grad Year</th>
 					<th>Level</th>
+					<th>Major</th>
 					<th>Link to Resume</th>
 				</tr>
 			</thead>
