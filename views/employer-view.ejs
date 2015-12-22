@@ -3,14 +3,19 @@
 	<head>
 		<% include partials/template/head.ejs %>
 		<!-- JSX Stuff -->
-		<script src="/components/react/react-with-addons.min.js"></script>
+		<script src="/components/react/react-with-addons.js"></script>
 		<script src="/components/react/JSXTransformer.js"></script>
 	</head>
 	<body>
-		<h1><%= title %></h1>
+		<% include partials/template/nav.ejs %>
+		<div class="row center-text">
+			<h1><%= title %></h1>
+		</div>
+
 		<div id="employer-dashboard"></div>
 
 		<script src="/javascripts/employer-form.js"></script>
+		
 		<!-- React -->
 		<script type="text/jsx" src="/javascripts/employer-view.jsx"></script>
 	</body>

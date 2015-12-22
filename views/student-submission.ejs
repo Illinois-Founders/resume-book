@@ -1,73 +1,96 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<% include partials/template/head.ejs %>
-		<!-- recaptcha script -->
-		<script src='https://www.google.com/recaptcha/api.js'></script>
-	</head>
-	<body>
-		<h1><%= title %></h1>
-		<form name="student-submission" enctype="multipart/form-data" method="post" action="/students">
-			<label for="firstname">First Name</label>
-			<input type="text" name="firstname" placeholder="First" required> <br>
-			<label for="lastname">Last Name</label>
-			<input type="text" name="lastname" placeholder="Last" required> <br>
-			<label for="netid">NetID</label>
-			<input type="text" name="netid" placeholder="netid" required> <br>
+<head>
+	<% include partials/template/head.ejs %>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+<body>
+	<% include partials/template/nav.ejs %>
+	<div class="form-container row">
+		<div class="col-md-4 col-md-offset-4">
+			<h1><%= title %></h1>
+			<form name="student-submission" enctype="multipart/form-data" method="post" action="/students">
+				
+				<div class="form-field">
+					<label for="firstname">First Name</label>
+					<input type="text" name="firstname" placeholder="First" required> <br>
+				</div>
 
-			<!-- Grad year -->
-			<label for="gradyear">Grad Year</label>
-			<select name="gradyear" required>
-				<option value="2015">2015</option>
-				<option value="2016">2016</option>
-				<option value="2017">2017</option>
-				<option value="2018">2018</option>
-				<option value="2019">2019</option>
-			</select> <br>
+				<div class="form-field">
+					<label for="lastname">Last Name</label>
+					<input type="text" name="lastname" placeholder="Last" required> <br>
+				</div>
+				
+				<div class="form-field">
+					<label for="netid">NetID</label>
+					<input type="text" name="netid" placeholder="netid" required> <br>					
+				</div>
 
-			<!-- Major -->
-			<label for="major">Major</label>
-			<select name="major" required>
-				<option value="cs">Computer Science</option>
-				<option value="ce">Computer Engineering</option>
-				<option value="ee">Electrical Engineering</option>
-				<option value="ae">Aerospace Engineering</option>
-				<option value="age">Agricultural Engineering</option>
-				<option value="bioe">Bioengineering</option>
-				<option value="chem">Chemical Engineering</option>
-				<option value="cive">Civil Engineering</option>
-				<option value="phys">Engineering Physics</option>
-				<option value="ge">General Engineering</option>
-				<option value="ie">Industrial Engineering</option>
-				<option value="matse">Materials Science and Engineering</option>
-				<option value="me">Mechanical Engineering/Engineering Mechanics</option>
-				<option value="npre">Nuclear Engineering</option>
-				<option value="noneng">Other Major</option>
-			</select> <br>
+				<div class="form-field">
+					<label for="gradyear">Grad Year</label>
+					<select name="gradyear" required>
+						<option value="2015">2015</option>
+						<option value="2016">2016</option>
+						<option value="2017">2017</option>
+						<option value="2018">2018</option>
+						<option value="2019">2019</option>
+					</select>
+				</div>
 
-			<!-- Level -->
-			<label for="level"> Level </label>
-			<select name="level" required>
-				<option value="undergrad">Undergraduate</option>
-				<option value="masters">Master's</option>
-				<option value="phd">PhD</option>
-			</select> <br>
+				<!-- Major -->
+				<div class="form-field">
+					<label for="major">Major</label>
+					<select name="major" required>
+						<option value="cs">Computer Science</option>
+						<option value="ce">Computer Engineering</option>
+						<option value="ee">Electrical Engineering</option>
+						<option value="ae">Aerospace Engineering</option>
+						<option value="age">Agricultural Engineering</option>
+						<option value="bioe">Bioengineering</option>
+						<option value="chem">Chemical Engineering</option>
+						<option value="cive">Civil Engineering</option>
+						<option value="phys">Engineering Physics</option>
+						<option value="ge">General Engineering</option>
+						<option value="ie">Industrial Engineering</option>
+						<option value="matse">Materials Science and Engineering</option>
+						<option value="me">Mechanical Engineering/Engineering Mechanics</option>
+						<option value="npre">Nuclear Engineering</option>
+						<option value="noneng">Other Major</option>
+					</select> 
+				</div> <!-- <br> -->
 
-			<!-- looking for -->
-			Seeking <br>
-			<input type="radio" name="seeking" value="fulltime" required> Fulltime
-			<input type="radio" name="seeking" value="internship" required> Internship
-			<br>
+				<!-- Level -->
+				<div class="form-field">
+					<label for="level"> Level </label>
+					<select name="level" required>
+						<option value="undergrad">Undergraduate</option>
+						<option value="masters">Master's</option>
+						<option value="phd">PhD</option>
+					</select>				
+				</div> <!-- <br> -->
 
-			<!-- File upload -->
-			Resume <br>
-			<input type="file" name="resume" id="resume" accept="application/pdf" required> 
-			<br>
+				<!-- looking for -->
+				<div class="form-field">
+					<label> Seeking</label> <br>
+					<input type="radio" name="seeking" value="fulltime" required> Fulltime
+					<input type="radio" name="seeking" value="internship" required> Internship
+				</div>
+				<br>
 
-			<!-- Recaptcha -->
-			<div class="g-recaptcha" data-sitekey="6Ldd5QwTAAAAAMSexsZ01_CkruFc8BItFDxZVq-H"></div>
-			<input type="submit">
-		</form>
-	</body>
+				<!-- File upload -->
+				<div class="form-field">
+					<label>Resume</label><br>
+					<input type="file" name="resume" id="resume" accept="application/pdf" required> 					
+				</div>
+				<br>
+
+				<!-- Recaptcha -->
+				<div class="g-recaptcha" data-sitekey="6Ldd5QwTAAAAAMSexsZ01_CkruFc8BItFDxZVq-H"></div>
+				<input type="submit">
+			</form>
+			
+		</div>
+	</div>
+</body>
 
 </html>
