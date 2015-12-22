@@ -71,10 +71,10 @@ router.post('/students', studentResumeField, function (req, res, next) {
 						console.log(req.body.netid + " not found");
 						res.status(400).send("NetID not found.");
 					} else {
-						if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
-							(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
-							res.status(400).send("First name or last name doesn't match Illinois directory records.");
-						} else {
+						// if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
+						// 	(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
+						// 	res.status(400).send("First name or last name doesn't match Illinois directory records.");
+						// } else {
 							updateInfoAndResume(req, function (error) {
 								if (error) {
 									console.log("Error while updating info and resume for " + req.body.netid);
@@ -82,9 +82,10 @@ router.post('/students', studentResumeField, function (req, res, next) {
 								} else {
 									console.log("Successfully updated info and resume for " + req.body.netid);
 									res.send("Successfully updated info and resume!");
+									
 								}
 							});
-						}
+						// }
 					}
 				});
 			} else {
@@ -194,7 +195,7 @@ router.get('/students/search', function (req, res, next) {
 });
 
 router.get('/employers', function (req, res, next) {
-	res.render('employer-login', {title: 'Employer Login Page' });
+	res.render('employer-login', {title: 'Employer Login Page', user: req.user });
 });
 
 // EMPLOYER REGISTRATION METHOD
@@ -216,7 +217,7 @@ router.post('/employers/register', function (req, res) {
 router.post('/employers', passport.authenticate('local'), function (req, res, next) {
 	console.log("Employer logged in!");
 	console.log(req.user);
-	res.redirect('/');
+	res.redirect('/employers/dashboard');
 });
 
 router.get('/employers/dashboard', function (req, res) {

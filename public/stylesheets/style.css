@@ -1,8 +1,31 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: gray;
 }
 
 a {
   color: #00B7FF;
+}
+
+.form-container{
+	margin: 0 auto;
+}
+
+.form-field {
+	padding-top: 10px;
+}
+
+.center-text{
+	text-align: center;
+}
+
+div.search-field{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.search-field > input, div.search-field > select{
+	margin-left: 5px;
+	margin-right: 5px;
 }

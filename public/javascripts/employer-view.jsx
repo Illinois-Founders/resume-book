@@ -4,14 +4,34 @@ var EmployerDashboard = React.createClass({
 	getInitialState: function () {
 		return {results: []};
 	},
+	componentDidMount: function(){
+		console.log('running component did mount');
+		console.log(this.state.results);
+		console.log(this.state.results.length);
+		this.props.handleSubmit;
+
+		this.handleSubmit;
+
+		// $.getJSON("/students/search?", formData, function (data) {
+		// 	this.props.onCompleteSearch(data);
+		// }.bind(this));
+	},
 	completeSearch: function (data) {
 		this.setState({results: data});
 	},
 	render: function () {
+		var results; 
+		if (this.state.results.length > 0){
+			results = <ResultsTable results={this.state.results} />;
+		}
+		else {
+			results = <div className="center-text"> <h3> No results to show yet. Try a search! </h3></div>;
+		}
+
 		return (
 		<div>
 			<SearchFields onCompleteSearch={this.completeSearch} />
-			<ResultsTable results={this.state.results} />
+			{results}
 		</div>
 		);
 	}
@@ -30,6 +50,8 @@ var SearchFields = React.createClass({
 	},
 	handleSubmit: function (e) {
 		e.preventDefault();
+
+		console.log('running handle submit');
 
 		// get relevant form data
 		var formData = {};
@@ -73,69 +95,82 @@ var SearchFields = React.createClass({
 	render: function () {
 		return (
 		<form id="student-search-fields" method="get" onSubmit={this.handleSubmit}>
-			<label htmlFor="firstname">First Name</label>
-			<input type="text" name="firstname" placeholder="First Name" valueLink={this.linkState('firstname')} /><br/>
-			<label htmlFor="lastname">Last Name</label>
-			<input type="text" name="lastname" placeholder="Last Name" valueLink={this.linkState('lastname')} /><br/>
-			<label htmlFor="netid">NetID</label>
-			<input type="text" name="netid" placeholder="NetID" valueLink={this.linkState('netid')} /><br/>
+			<div className="panel panel-primary search-fields">
+				<div className="panel-body">
+					<h4> Search By: </h4>
+					<div className="search-field">
+						<label htmlFor="firstname">First Name</label>
+						<input type="text" name="firstname" placeholder="First Name" valueLink={this.linkState('firstname')} /><br/>
+						<label htmlFor="lastname">Last Name</label>
+						<input type="text" name="lastname" placeholder="Last Name" valueLink={this.linkState('lastname')} /><br/>
+						<label htmlFor="netid">NetID</label>
+						<input type="text" name="netid" placeholder="NetID" valueLink={this.linkState('netid')} /><br/>
+					</div>
 
-			<label htmlFor="gradyear">Grad Year</label><br/>
-			<input type="checkbox" name="gradyear[]" value="2015" checkedLink={this.linkState('gradyear2015')} /> 2015
-			<input type="checkbox" name="gradyear[]" value="2016" checkedLink={this.linkState('gradyear2016')} /> 2016
-			<input type="checkbox" name="gradyear[]" value="2017" checkedLink={this.linkState('gradyear2017')} /> 2017
-			<input type="checkbox" name="gradyear[]" value="2018" checkedLink={this.linkState('gradyear2018')} /> 2018
-			<input type="checkbox" name="gradyear[]" value="2019" checkedLink={this.linkState('gradyear2019')} /> 2019
-			<br/>
+					<div className="search-field">
+						<label htmlFor="gradyear">Graduation Year</label><br/>
+						<input type="checkbox" name="gradyear[]" value="2015" checkedLink={this.linkState('gradyear2015')} /> 2015
+						<input type="checkbox" name="gradyear[]" value="2016" checkedLink={this.linkState('gradyear2016')} /> 2016
+						<input type="checkbox" name="gradyear[]" value="2017" checkedLink={this.linkState('gradyear2017')} /> 2017
+						<input type="checkbox" name="gradyear[]" value="2018" checkedLink={this.linkState('gradyear2018')} /> 2018
+						<input type="checkbox" name="gradyear[]" value="2019" checkedLink={this.linkState('gradyear2019')} /> 2019
+					</div>
 
-			<label htmlFor="major">Major</label><br/>
-			<input type="checkbox" name="major[]" value="cs" checkedLink={this.linkState('cs')} /> Computer Science
-			<input type="checkbox" name="major[]" value="ce" checkedLink={this.linkState('ce')} /> Computer Engineering
-			<input type="checkbox" name="major[]" value="ee" checkedLink={this.linkState('ee')} /> Electrial Engineering
-			<input type="checkbox" name="major[]" value="ae" checkedLink={this.linkState('ae')} /> Aerospace Engineering
-			<input type="checkbox" name="major[]" value="age" checkedLink={this.linkState('age')} /> Agricultural Engineering
-			<input type="checkbox" name="major[]" value="bioe" checkedLink={this.linkState('bioe')} /> Bioengineering
-			<input type="checkbox" name="major[]" value="chem" checkedLink={this.linkState('chem')} /> Chemical Engineering
-			<input type="checkbox" name="major[]" value="cive" checkedLink={this.linkState('cive')} /> Civil Engineering
-			<input type="checkbox" name="major[]" value="phys" checkedLink={this.linkState('phys')} /> Engineering Physics
-			<input type="checkbox" name="major[]" value="ge" checkedLink={this.linkState('ge')} /> General Engineering
-			<input type="checkbox" name="major[]" value="ie" checkedLink={this.linkState('ie')} /> Industrial Engineering
-			<input type="checkbox" name="major[]" value="matse" checkedLink={this.linkState('matse')} /> Materials Science and Engineering
-			<input type="checkbox" name="major[]" value="me" checkedLink={this.linkState('me')} /> Mechanical Engineering
-			<input type="checkbox" name="major[]" value="npre" checkedLink={this.linkState('npre')} /> Nuclear Engineering
-			<input type="checkbox" name="major[]" value="noneng" checkedLink={this.linkState('noneng')} /> Other Major
-			<br/>
+					<div className="search-field">
+						<label htmlFor="major">Major</label><br/>
+						<input type="checkbox" name="major[]" value="cs" checkedLink={this.linkState('cs')} /> Computer Science
+						<input type="checkbox" name="major[]" value="ce" checkedLink={this.linkState('ce')} /> Computer Engineering
+						<input type="checkbox" name="major[]" value="ee" checkedLink={this.linkState('ee')} /> Electrial Engineering
+						<input type="checkbox" name="major[]" value="ae" checkedLink={this.linkState('ae')} /> Aerospace Engineering
+						<input type="checkbox" name="major[]" value="age" checkedLink={this.linkState('age')} /> Agricultural Engineering
+						<input type="checkbox" name="major[]" value="bioe" checkedLink={this.linkState('bioe')} /> Bioengineering
+						<input type="checkbox" name="major[]" value="chem" checkedLink={this.linkState('chem')} /> Chemical Engineering
+						<input type="checkbox" name="major[]" value="cive" checkedLink={this.linkState('cive')} /> Civil Engineering
+						<input type="checkbox" name="major[]" value="phys" checkedLink={this.linkState('phys')} /> Engineering Physics
+						<input type="checkbox" name="major[]" value="ge" checkedLink={this.linkState('ge')} /> General Engineering
+						<input type="checkbox" name="major[]" value="ie" checkedLink={this.linkState('ie')} /> Industrial Engineering
+						<input type="checkbox" name="major[]" value="matse" checkedLink={this.linkState('matse')} /> Materials Science and Engineering
+						<input type="checkbox" name="major[]" value="me" checkedLink={this.linkState('me')} /> Mechanical Engineering
+						<input type="checkbox" name="major[]" value="npre" checkedLink={this.linkState('npre')} /> Nuclear Engineering
+						<input type="checkbox" name="major[]" value="noneng" checkedLink={this.linkState('noneng')} /> Other Major
+					</div>
 
-			<label htmlFor="level">Level</label><br/>
-			<input type="checkbox" name="level[]" value="undergrad" checkedLink={this.linkState('undergrad')} /> Undergraduate
-			<input type="checkbox" name="level[]" value="masters" checkedLink={this.linkState('masters')} /> Master's
-			<input type="checkbox" name="level[]" value="phd" checkedLink={this.linkState('phd')} /> PhD
-			<br/>
+					<div className="search-field">
+						<label htmlFor="level">Level</label><br/>
+						<input type="checkbox" name="level[]" value="undergrad" checkedLink={this.linkState('undergrad')} /> Undergraduate
+						<input type="checkbox" name="level[]" value="masters" checkedLink={this.linkState('masters')} /> Masters
+						<input type="checkbox" name="level[]" value="phd" checkedLink={this.linkState('phd')} /> PhD
+					</div>
 
-			<label htmlFor="seeking">Seeking</label><br/>
-			<input type="checkbox" name="seeking[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
-			<input type="checkbox" name="seeking[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
-			<br/>
+					<div className="search-field">
+						<label htmlFor="seeking">Seeking</label><br/>
+						<input type="checkbox" name="seeking[]" value="fulltime" checkedLink={this.linkState('fulltime')} /> Fulltime
+						<input type="checkbox" name="seeking[]" value="internship" checkedLink={this.linkState('internship')} /> Internship
+					</div>
 
-			<label htmlFor="sortby">Sort by</label>
-			<select name="sortby" valueLink={this.linkState('sortby')}>
-				<option value="none">None</option>
-				<option value="firstname">Firstname</option>
-				<option value="lastname">Lastname</option>
-				<option value="netid">Email/NetID</option>
-				<option value="gradyear">Grad Year</option>
-				<option value="major">Major</option>
-				<option value="seeking">Looking for</option>
-				<option value="level">Level</option>
-			</select>
+					<div className="search-field">
+						<label htmlFor="sortby">Sort by</label>
+						<select name="sortby" valueLink={this.linkState('sortby')}>
+							<option value="none">None</option>
+							<option value="firstname">Firstname</option>
+							<option value="lastname">Lastname</option>
+							<option value="netid">Email/NetID</option>
+							<option value="gradyear">Grad Year</option>
+							<option value="major">Major</option>
+							<option value="seeking">Looking for</option>
+							<option value="level">Level</option>
+						</select>
 
-			<label htmlFor="sortorder">Sort order</label>
-			<select name="sortorder" valueLink={this.linkState('sortorder')}>
-				<option value="">Ascending</option>
-				<option value="-">Descending</option>
-			</select>
+						<label htmlFor="sortorder">Sort order</label>
+						<select name="sortorder" valueLink={this.linkState('sortorder')}>
+							<option value="">Ascending</option>
+							<option value="-">Descending</option>
+						</select>
+					</div>
 
-			<input type="submit" value="Search" />
+					<input type="submit" value="Search" />
+				</div>
+			</div>
 		</form>
 		);
 	}
@@ -178,14 +213,14 @@ var ResultsRow = React.createClass({
 		var level = levelDict[this.props.student.level] || this.props.student.level;
 		var major = majorDict[this.props.student.major] || this.props.student.major;
 		return (
-		<tr>
-			<td>{this.props.student.firstname} {this.props.student.lastname}</td>
-			<td><a href={"mailto:" + email}>{email}</a></td>
-			<td>{seeking}</td>
-			<td>{this.props.student.gradyear}</td>
-			<td>{level}</td>
-			<td>{major}</td>
-			<td><a target="_blank" href={resumeLink}><i className="fa fa-external-link"></i></a></td>
+		<tr className="row panel panel-default">
+			<td className="col-md-2">{this.props.student.firstname} {this.props.student.lastname}</td>
+			<td className="col-md-2"> <a href={"mailto:" + email}>{email}</a></td>
+			<td className="col-md-2">{seeking}</td>
+			<td className="col-md-2">{this.props.student.gradyear}</td>
+			<td className="col-md-2">{level}</td>
+			<td className="col-md-2">{major}</td>
+			<td className="col-md-2"><a target="_blank" href={resumeLink}><i className="fa fa-external-link"></i></a></td>
 		</tr>
 		);
 	}
@@ -199,15 +234,15 @@ var ResultsTable = React.createClass({
 		});
 		return (
 		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Seeking</th>
-					<th>Grad Year</th>
-					<th>Level</th>
-					<th>Major</th>
-					<th>Link to Resume</th>
+			<thead className="panel panel-default">
+				<tr className="row">
+					<th className="col-md-2">Name</th>
+					<th className="col-md-2">Email</th>
+					<th className="col-md-2">Seeking</th>
+					<th className="col-md-2">Grad Year</th>
+					<th className="col-md-2">Level</th>
+					<th className="col-md-2">Major</th>
+					<th className="col-md-2">Link to Resume</th>
 				</tr>
 			</thead>
 			<tbody>
