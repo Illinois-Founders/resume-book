@@ -88,7 +88,7 @@ var SearchFields = React.createClass({
 		<form id="student-search-fields" method="get" onSubmit={this.handleSubmit}>
 			<div className="panel panel-primary search-fields">
 				<div className="panel-body">
-					<h4> Search By: </h4> <>
+					<h4> Search By: </h4>
 					<div className="search-field">
 						<label htmlFor="firstname">First Name</label>
 						<input type="text" name="firstname" placeholder="First Name" valueLink={this.linkState('firstname')} /><br/>
