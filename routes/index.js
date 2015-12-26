@@ -65,16 +65,12 @@ router.post('/students', studentResumeField, function (req, res, next) {
 			var grServerRes = JSON.parse(body);
 			if (grServerRes.success) {
 				// success
-				// verify net ID exists, and against first and last name
+				// verify net ID exists
 				UIUCID(req.body.netid, function (err, details) {
 					if (err) {
 						console.log(req.body.netid + " not found");
 						res.status(400).send("NetID not found.");
 					} else {
-						// if ((req.body.firstname.toUpperCase() !== details.firstname.toUpperCase()) || 
-						// 	(req.body.lastname.toUpperCase() !== details.lastname.toUpperCase())) { // case insensitive
-						// 	res.status(400).send("First name or last name doesn't match Illinois directory records.");
-						// } else {
 							updateInfoAndResume(req, function (error) {
 								if (error) {
 									console.log("Error while updating info and resume for " + req.body.netid);
@@ -82,7 +78,6 @@ router.post('/students', studentResumeField, function (req, res, next) {
 								} else {
 									console.log("Successfully updated info and resume for " + req.body.netid);
 									res.send("Successfully updated info and resume!");
-									
 								}
 							});
 						// }
@@ -198,11 +193,46 @@ router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page', user: req.user });
 });
 
+// API method to get all employers
+router.get('/employers/all', function(req, res, next) {
+
+	Employer.find({}, function(err,docs) {
+		if (err) {
+			res.status(500).send("Error fetching results from database.");
+		} else {
+			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+			res.header('Expires', '-1');
+			res.header('Pragma', 'no-cache');
+			res.send(docs);
+		}
+	});
+});
+
+router.get('/employers/delete/:username', function(req, res, next){
+	res.send(req.params['username']);
+
+	var query = {};
+	query.username = req.params['username'];
+	// set justOne to true to ensure only 1 employer is deleted.
+	Employer.remove(query, true, function (err, docs){
+		if (err){
+			res.status(500).send("Error deleting from database.");
+		}
+		else {
+			console.log('deleting...');
+			res.send(docs);
+		}
+	});
+});
+
 // EMPLOYER REGISTRATION METHOD
 router.post('/employers/register', function (req, res) {
+	console.log(req.body);
+	
 	Employer.register(new Employer({
 		username: req.body.username,
-		company_name: req.body.companyName
+		company_name: req.body.companyName,
+		email: req.body.email
 	}), req.body.password, function (err, account) {
 		console.log("Registering new employer");
 		account.company_name = req.body.companyName;
@@ -231,10 +261,14 @@ router.post('/employers/logout', function (req, res) {
 	res.redirect('/');
 });
 
-router.post('/students', function(req, res, next){
+router.post('/students', function (req, res, next){
 	console.log('post to students..')
-	console.log(req);
 	res.send(200);
+});
+
+router.get('/admin', function (req,res,next){
+	console.log('going to admin panel..')
+	res.render('admin', {title: "Admin Panel"});
 });
 
 module.exports = router;
