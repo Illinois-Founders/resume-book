@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include partials/template/head.ejs %>
+		<!-- JSX -->
+		<script src="/components/react/react-with-addons.js"></script>
+		<script src="/components/react/JSXTransformer.js"></script>
+	</head>
+
+	<body>
+		<% include partials/template/nav.ejs %>
+		<div class="row center-text margin-20-bottom">
+			<h1><%= title %></h1>
+			<h2>Registered Employers</h2>
+		</div>
+
+		<div class="col-md-8 col-md-offset-2">
+			<form name="employer-registration" method="post" action="/employers/register">
+				<label for="companyName">Company</label>
+				<input type="text" name="companyName" placeholder="Company Name" required> <br>
+				<label for="email">Email</label>
+				<input type="text" name="email" placeholder="Email" required> <br>
+				<label for="username">Username</label>
+				<input type="text" name="username" placeholder="Username" required> <br>
+				<label for="password">Password</label>
+				<input type="password" name="password" placeholder="Password" required> <br>
+				<input type="submit">
+			</form>
+		</div>
+
+		<br>
+		
+		<div id="employer-table"></div>
+
+		<!-- React -->
+		<script type="text/jsx" src="/javascripts/admin-panel.jsx"></script>
+	</body>
+</html>
