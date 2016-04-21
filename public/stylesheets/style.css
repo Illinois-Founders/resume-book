@@ -20,6 +20,10 @@ a {
 	text-align: center;
 }
 
+.margin-20-bottom{
+	margin-bottom: 20px;
+}
+
 div.search-field{
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -28,4 +32,8 @@ div.search-field{
 div.search-field > input, div.search-field > select{
 	margin-left: 5px;
 	margin-right: 5px;
+}
+
+#employer-table {
+	margin-top: 100px;
 }

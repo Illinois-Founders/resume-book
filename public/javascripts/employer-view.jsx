@@ -6,32 +6,23 @@ var EmployerDashboard = React.createClass({
 	},
 	componentDidMount: function(){
 		console.log('running component did mount');
-		console.log(this.state.results);
-		console.log(this.state.results.length);
-		this.props.handleSubmit;
-
-		this.handleSubmit;
-
-		// $.getJSON("/students/search?", formData, function (data) {
-		// 	this.props.onCompleteSearch(data);
-		// }.bind(this));
 	},
 	completeSearch: function (data) {
 		this.setState({results: data});
 	},
 	render: function () {
-		var results; 
+		var toRender; 
 		if (this.state.results.length > 0){
-			results = <ResultsTable results={this.state.results} />;
+			toRender = <ResultsTable results={this.state.results} />;
 		}
 		else {
-			results = <div className="center-text"> <h3> No results to show yet. Try a search! </h3></div>;
+			toRender = <div className="center-text"> <h3> No results to show yet. Try a search! </h3></div>;
 		}
 
 		return (
 		<div>
 			<SearchFields onCompleteSearch={this.completeSearch} />
-			{results}
+			{toRender}
 		</div>
 		);
 	}
@@ -97,7 +88,7 @@ var SearchFields = React.createClass({
 		<form id="student-search-fields" method="get" onSubmit={this.handleSubmit}>
 			<div className="panel panel-primary search-fields">
 				<div className="panel-body">
-					<h4> Search By: </h4>
+					<h4> Search By: </h4> <>
 					<div className="search-field">
 						<label htmlFor="firstname">First Name</label>
 						<input type="text" name="firstname" placeholder="First Name" valueLink={this.linkState('firstname')} /><br/>
