@@ -5,7 +5,9 @@ var EmployerDashboard = React.createClass({
 		return {results: []};
 	},
 	componentDidMount: function(){
-		console.log('running component did mount');
+		$.getJSON("/students/all?", function (data) {
+			this.setState({results: data});
+		}.bind(this));
 	},
 	completeSearch: function (data) {
 		this.setState({results: data});
