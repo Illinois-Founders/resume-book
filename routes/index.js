@@ -65,22 +65,13 @@ router.post('/students', studentResumeField, function (req, res, next) {
 			var grServerRes = JSON.parse(body);
 			if (grServerRes.success) {
 				// success
-				// verify net ID exists
-				UIUCID(req.body.netid, function (err, details) {
-					if (err) {
-						console.log(req.body.netid + " not found");
-						res.status(400).send("NetID not found.");
+				updateInfoAndResume(req, function (error) {
+					if (error) {
+						console.log("Error while updating info and resume for " + req.body.netid);
+						res.status(500).send(error);
 					} else {
-							updateInfoAndResume(req, function (error) {
-								if (error) {
-									console.log("Error while updating info and resume for " + req.body.netid);
-									res.status(500).send(error);
-								} else {
-									console.log("Successfully updated info and resume for " + req.body.netid);
-									res.send("Successfully updated info and resume!");
-								}
-							});
-						// }
+						console.log("Successfully updated info and resume for " + req.body.netid);
+						res.send("Successfully updated info and resume!");
 					}
 				});
 			} else {
