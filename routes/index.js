@@ -48,7 +48,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/students', function(req, res, next){
-	res.render('student-submission', {title: 'Student Resume Drop' });
+	res.render('student-submission', {title: 'Student Resume Drop', user: req.user });
 });
 
 // STUDENT SUBMISSION METHOD
@@ -180,6 +180,20 @@ router.get('/students/search', function (req, res, next) {
 	});
 });
 
+router.get('/students/all', function (req, res, next){
+	Student.find({}, function(err,docs) {
+		if (err) {
+			res.status(500).send("Error fetching results from database.");
+		} else {
+			res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+			res.header('Expires', '-1');
+			res.header('Pragma', 'no-cache');
+			res.send(docs);
+		}
+	});
+
+});
+
 router.get('/employers', function (req, res, next) {
 	res.render('employer-login', {title: 'Employer Login Page', user: req.user });
 });
@@ -210,7 +224,6 @@ router.get('/employers/delete/:username', function(req, res, next){
 			res.status(500).send("Error deleting from database.");
 		}
 		else {
-			console.log('deleting...');
 			res.send(docs);
 		}
 	});
@@ -218,8 +231,6 @@ router.get('/employers/delete/:username', function(req, res, next){
 
 // EMPLOYER REGISTRATION METHOD
 router.post('/employers/register', function (req, res) {
-	console.log(req.body);
-	
 	Employer.register(new Employer({
 		username: req.body.username,
 		company_name: req.body.companyName,
@@ -237,13 +248,16 @@ router.post('/employers/register', function (req, res) {
 // EMPLOYER LOGIN METHOD
 router.post('/employers', passport.authenticate('local'), function (req, res, next) {
 	console.log("Employer logged in!");
-	console.log(req.user);
 	res.redirect('/employers/dashboard');
 });
 
 router.get('/employers/dashboard', function (req, res) {
-	// TODO: ensure logged in, then view dashboard
-	res.render('employer-view', {title: "Employers' Dashboard"});
+	if (req.user != null ) {
+		res.render('employer-view', {title: "Employers' Dashboard", user: req.user});
+	}
+	else {
+		res.redirect('/');
+	}
 });
 
 // EMPLOYER LOGOUT METHOD
@@ -252,14 +266,13 @@ router.post('/employers/logout', function (req, res) {
 	res.redirect('/');
 });
 
-router.post('/students', function (req, res, next){
-	console.log('post to students..')
-	res.send(200);
-});
+// router.post('/students', function (req, res, next){
+// 	console.log('post to students..')
+// 	res.send(200);
+// });
 
 router.get('/admin', function (req,res,next){
-	console.log('going to admin panel..')
-	res.render('admin', {title: "Admin Panel"});
+	res.render('admin', {title: "Admin Panel", user: req.user });
 });
 
 module.exports = router;
