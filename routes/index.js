@@ -11,26 +11,26 @@ if (process.env.G_RECAPTCHA_SECRET) {
 	// production
 	config.G_RECAPTCHA_SECRET = process.env.G_RECAPTCHA_SECRET;
 } else {
-	// development
-	config = require('../config');
+  // development
+  config = require('../config');
 }
 
 // multer config
 var multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({
-	limits: { fileSize: 512*1024 }, // limit resumes to 512 kb
-	storage: storage
+  limits: { fileSize: 512*1024 }, // limit resumes to 512 kb
+  storage: storage
 });
 
 // AWS S3 config
 var AWS = require('aws-sdk');
 if (!process.env.AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
-	// For development environment
-	// IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
-	var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
-	AWS.config.credentials = credentials;
-	console.log("Credentials:", credentials); //DEBUG
+  // For development environment
+  // IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
+  var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
+  AWS.config.credentials = credentials;
+  console.log("Credentials:", credentials); //DEBUG
 }
 var s3 = new AWS.S3();
 
@@ -40,46 +40,58 @@ var db = mongoose.connection;
 
 // misc requires
 var passport = require('passport');
-var UIUCID = require('illinois-directory');
+var verifier = require('email-verify');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-	res.render('index', { title: 'Founders Resume Book', user: req.user });
+  res.render('index', { title: 'Founders Resume Book', user: req.user });
 });
 
 router.get('/students', function(req, res, next){
-	res.render('student-submission', {title: 'Student Resume Drop' });
+  res.render('student-submission', {title: 'Student Resume Drop' });
 });
 
 // STUDENT SUBMISSION METHOD
 var studentResumeField = upload.single('resume');
 router.post('/students', studentResumeField, function (req, res, next) {
-	// first verify recaptcha
-	var grRes = req.body["g-recaptcha-response"];
-	var url = "https://www.google.com/recaptcha/api/siteverify?secret=" + config.G_RECAPTCHA_SECRET + "&response=" + grRes + "&remoteip=" + req.connection.remoteAddress;
-	request.post(url, function (err, httpResponse, body) {
-		if (err) {
-			res.status(500).send("Error in processing recaptcha: " + err);
+// first verify recaptcha
+var grRes = req.body["g-recaptcha-response"];
+var url = "https://www.google.com/recaptcha/api/siteverify?secret=" + config.G_RECAPTCHA_SECRET + "&response=" + grRes + "&remoteip=" + req.connection.remoteAddress;
+request.post(url, function (err, httpResponse, body) {
+  if (err) {
+    res.status(500).send("Error in processing recaptcha: " + err);
+  } else {
+    var grServerRes = JSON.parse(body);
+    if (grServerRes.success) {
+      // success
+      // verify <netid>@illinois.edu exists
+      var emailAddress = req.body.netid + "@illinois.edu";
+      verifier.verify(emailAddress, function(err, info) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (info.success) {
+            updateInfoAndResume(req, function (error) {
+              if (error) {
+                console.log("Error while updating info and resume for " + req.body.netid);
+                res.status(500).send(error);
+              } else {
+                console.log("Successfully updated info and resume for " + req.body.netid);
+                res.send("Successfully updated info and resume!");
+              }
+            });
+          } else {
+            console.log(req.body.netid + " not found");
+            res.status(400).send("NetID not found.");
+          }
+        }
+      }); 
 		} else {
-			// check if success
-			var grServerRes = JSON.parse(body);
-			if (grServerRes.success) {
-				// success
-				updateInfoAndResume(req, function (error) {
-					if (error) {
-						console.log("Error while updating info and resume for " + req.body.netid);
-						res.status(500).send(error);
-					} else {
-						console.log("Successfully updated info and resume for " + req.body.netid);
-						res.send("Successfully updated info and resume!");
-					}
-				});
-			} else {
-				// failure
-				var errorCodes = grServerRes["error-codes"];
-				console.log("User at " + req.connection.remoteAddress + " failed recaptcha: " + errorCodes);
-				res.status(400).send("Resume submission failed. Error codes: " + errorCodes);
-			}
+		    // failure
+			  var errorCodes = grServerRes["error-codes"];
+			  console.log("User at " + req.connection.remoteAddress + " failed recaptcha: " + errorCodes);
+			  res.status(400).send("Resume submission failed. Error codes: " + errorCodes);
+		  }
 		}
 	});
 });

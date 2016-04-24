@@ -7,16 +7,12 @@ Resume Book for [Founders](http://founders.illinois.edu/). <!--Available [here](
 ```sh
 $ npm install
 $ cp config.example.js config.js
-# Edit config.js with API tokens
-$ npm start
+# Add API tokens to config.js
+# Set up AWS tokens according to: 
+# http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html
+
+$ mongod
 
 # In a separate process
-$ mongod
+$ npm start
 ```
-
-<!-- Contributing 
-Add conributing guidelines here
-don't push to production -->
-
-<!-- License -->
-
