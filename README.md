@@ -1,7 +1,10 @@
 resume-book
 ===========
 
-Resume Book for [Founders](http://founders.illinois.edu/). <!--Available [here](http://founders.illinois.edu/resume-book/).-->
+Resume Book for [Founders](http://founders.illinois.edu/). 
+<!--- 
+Available [here](http://founders.illinois.edu/resume-book/). 
+-->
 
 ## Running Locally
 ```sh
