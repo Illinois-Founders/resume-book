@@ -6,7 +6,6 @@ var EmployerTable = React.createClass({
 	},
 	componentDidMount: function() {
 		$.getJSON("/employers/all?", function (data) {
-			console.log(data);
 			this.setState({results: data});
 		}.bind(this));
 	},
