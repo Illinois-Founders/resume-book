@@ -30,4 +30,5 @@ node_modules
 # Bower
 public/components
 
+# Config Files
 config.js
