@@ -261,6 +261,7 @@ var sendEmail = function(company, email, username, password){
 	var mailOptions = {
 	    from: '"Founders @ UIUC" <tech@founders.illinois.edu>', // sender address
 	    to: email, // list of receivers
+	    cc: 'tech@founders.illinois.edu',
 	    subject: 'New Founders Resume Book Account', // Subject line
 	    text: body, // plaintext body
 	};
