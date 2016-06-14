@@ -5,6 +5,7 @@
 		<!-- JSX -->
 		<script src="/components/react/react-with-addons.js"></script>
 		<script src="/components/react/JSXTransformer.js"></script>
+		<script src="/components/bootstrap/js/modal.js"></script>
 	</head>
 
 	<body>
@@ -14,19 +15,31 @@
 			<h2>Registered Employers</h2>
 		</div>
 
-		<div class="col-md-8 col-md-offset-2">
-			<form name="employer-registration" method="post" action="/employers/register">
-				<label for="companyName">Company</label>
-				<input type="text" name="companyName" placeholder="Company Name" required> <br>
-				<label for="email">Email</label>
-				<input type="text" name="email" placeholder="Email" required> <br>
-				<label for="username">Username</label>
-				<input type="text" name="username" placeholder="Username" required> <br>
-				<label for="password">Password</label>
-				<input type="password" name="password" placeholder="Password" required> <br>
-				<input type="submit">
-			</form>
+		<div class="col-md-3 col-md-offset-9">
+			<button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#registerModal"> Add Employer </button>
 		</div>
+
+		<div class="modal" id="registerModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Register Company</h4>
+					</div> <!-- end header -->
+					<div class="modal-body">
+						<form name="employer-registration" method="post" action="/employers/register">
+							<label for="companyName">Company</label>
+							<input type="text" name="companyName" placeholder="Company Name" required> <br>
+							<label for="email">Email</label>
+							<input type="text" name="email" placeholder="Email" required> <br>
+							<label for="username">Username</label>
+							<input type="text" name="username" placeholder="Username" required> <br>
+							<input type="submit">
+						</form>
+					</div> <!-- end modal body -->
+				</div> <!-- end modal content -->
+			</div> <!-- end modal dialog -->
+		</div> <!-- end modal -->
 
 		<br>
 		

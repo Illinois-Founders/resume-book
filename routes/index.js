@@ -5,6 +5,10 @@ var Student = require('../models/student');
 var Employer = require('../models/employer');
 var router = express.Router();
 
+var randomstring = require("randomstring");
+var nodemailer = require('nodemailer');
+var sesTransport = require('nodemailer-ses-transport');
+
 // environment variables config
 var config = {};
 if (process.env.G_RECAPTCHA_SECRET) {
@@ -30,9 +34,12 @@ if (!process.env.AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
   // IMPORTANT: keys should be stored under a profile named 'resumebook' if env vars aren't set
   var credentials = new AWS.SharedIniFileCredentials({profile: 'resumebook'});
   AWS.config.credentials = credentials;
+  AWS.config.region = 'us-east-1';
+
   console.log("Credentials:", credentials); //DEBUG
 }
 var s3 = new AWS.S3();
+var ses = new AWS.SES('email.us-east-1.amazonaws.com');
 
 // mongoose config
 var mongoose = require('mongoose');
@@ -226,8 +233,6 @@ router.get('/employers/all', function(req, res, next) {
 });
 
 router.get('/employers/delete/:username', function(req, res, next){
-	res.send(req.params['username']);
-
 	var query = {};
 	query.username = req.params['username'];
 	// set justOne to true to ensure only 1 employer is deleted.
@@ -238,22 +243,58 @@ router.get('/employers/delete/:username', function(req, res, next){
 		else {
 			res.send(docs);
 		}
-	});
+	}); // TO DO - add confirmation of successful delete via a message on front end?!
+
+	res.redirect("/admin");
 });
+
+//create nodemailer transport
+var transporter = nodemailer.createTransport(sesTransport({
+    ses: ses,
+    rateLimit: 2
+}));
+
+// helper function to send new account email
+var sendEmail = function(company, email, username, password){
+	var body = 'Hi ' + String(company) + ', \n \n A new account for you to access the Founders @ UIUC resume book has been created. Here are your credentials: \n \n ' + 'username: ' + username + '\n password: ' + password + '\n \n If you have any questions, please reach out at any time. We look forward to working with you! \n \n The Founders Team';
+
+	var mailOptions = {
+	    from: '"Founders @ UIUC" <tech@founders.illinois.edu>', // sender address
+	    to: email, // list of receivers
+	    subject: 'New Founders Resume Book Account', // Subject line
+	    text: body, // plaintext body
+	};
+
+	transporter.sendMail( mailOptions, function(error, info){
+		if (error){
+			console.log(error);
+		}
+		else {
+			console.log("Message sent successfully: " + info.response);
+		}
+	});
+};
 
 // EMPLOYER REGISTRATION METHOD
 router.post('/employers/register', function (req, res) {
+	var password = randomstring.generate(10);
+
 	Employer.register(new Employer({
 		username: req.body.username,
 		company_name: req.body.companyName,
 		email: req.body.email
-	}), req.body.password, function (err, account) {
+	}), password, function (err, account) {
 		console.log("Registering new employer");
+		// send an email to the user email welcoming them to the resume book! and include their password in it.
+		sendEmail(req.body.companyName, req.body.email, req.body.username, password);
+
 		account.company_name = req.body.companyName;
 		if (err) {
 			console.log("Error while trying to register!");
 		}
-		res.redirect('/');
+		else {
+			res.redirect('/');
+		}
 	});
 });
 
