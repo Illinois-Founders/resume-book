@@ -1,7 +1,6 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: gray;
 }
 
 a {
@@ -36,4 +35,9 @@ div.search-field > input, div.search-field > select{
 
 #employer-table {
 	margin-top: 100px;
+}
+
+.founders-mention {
+  margin-left: 5px;
+  font-size: 85%;
 }

@@ -1,96 +1,129 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<% include partials/template/head.ejs %>
-	<script src='https://www.google.com/recaptcha/api.js'></script>
-</head>
-<body>
-	<% include partials/template/nav.ejs %>
-	<div class="form-container row">
-		<div class="col-md-4 col-md-offset-4">
-			<h1><%= title %></h1>
-			<form name="student-submission" enctype="multipart/form-data" method="post" action="/students">
-				
-				<div class="form-field">
-					<label for="firstname">First Name</label>
-					<input type="text" name="firstname" placeholder="First" required> <br>
-				</div>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+      TACHYONS - css Toolkit
+    </title>
+    <meta name="description" content="Simple css">
 
-				<div class="form-field">
-					<label for="lastname">Last Name</label>
-					<input type="text" name="lastname" placeholder="Last" required> <br>
-				</div>
-				
-				<div class="form-field">
-					<label for="netid">NetID</label>
-					<input type="text" name="netid" placeholder="netid" required> <br>					
-				</div>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="author" content="@mrmrs">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./TACHYONS - css Toolkit_files/tachyons.min.css">
+<style>
+  .blue { color: #0074D9; }
+  .bg-blue { background-color: #0074D9; }
 
-				<div class="form-field">
-					<label for="gradyear">Grad Year</label>
-					<select name="gradyear" required>
-						<option value="2015">2015</option>
-						<option value="2016">2016</option>
-						<option value="2017">2017</option>
-						<option value="2018">2018</option>
-						<option value="2019">2019</option>
-					</select>
-				</div>
+  .carbon-poweredby { width: 100%; font-size: 12px; float: left; }
+  .carbon-wrap { float: left; width: 100%; box-sizing: border-box; }
+  .carbon-img  { float: left; width: 50%;  box-sizing: border-box; }
+  .carbon-text  { float: left; width: 50%; padding-left: 16px; box-sizing: border-box; font-size: 12px; }
 
-				<!-- Major -->
-				<div class="form-field">
-					<label for="major">Major</label>
-					<select name="major" required>
-						<option value="cs">Computer Science</option>
-						<option value="ce">Computer Engineering</option>
-						<option value="ee">Electrical Engineering</option>
-						<option value="ae">Aerospace Engineering</option>
-						<option value="age">Agricultural Engineering</option>
-						<option value="bioe">Bioengineering</option>
-						<option value="chem">Chemical Engineering</option>
-						<option value="cive">Civil Engineering</option>
-						<option value="phys">Engineering Physics</option>
-						<option value="ge">General Engineering</option>
-						<option value="ie">Industrial Engineering</option>
-						<option value="matse">Materials Science and Engineering</option>
-						<option value="me">Mechanical Engineering/Engineering Mechanics</option>
-						<option value="npre">Nuclear Engineering</option>
-						<option value="noneng">Other Major</option>
-					</select> 
-				</div> <!-- <br> -->
+  #carbonads a:link { text-decoration: none!important; color: #222!important; }
 
-				<!-- Level -->
-				<div class="form-field">
-					<label for="level"> Level </label>
-					<select name="level" required>
-						<option value="undergrad">Undergraduate</option>
-						<option value="masters">Master's</option>
-						<option value="phd">PhD</option>
-					</select>				
-				</div> <!-- <br> -->
+  .form-field {
+    margin-bottom: 10px;
+  }
 
-				<!-- looking for -->
-				<div class="form-field">
-					<label> Seeking</label> <br>
-					<input type="radio" name="seeking" value="fulltime" required> Fulltime
-					<input type="radio" name="seeking" value="internship" required> Internship
-				</div>
-				<br>
+</style>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 
-				<!-- File upload -->
-				<div class="form-field">
-					<label>Resume</label><br>
-					<input type="file" name="resume" id="resume" accept="application/pdf" required> 					
-				</div>
-				<br>
+<% include partials/template/nav.ejs %>
 
-				<!-- Recaptcha -->
-				<div class="g-recaptcha" data-sitekey="6Ldd5QwTAAAAAMSexsZ01_CkruFc8BItFDxZVq-H"></div>
-				<input type="submit">
-			</form>
-			
-		</div>
-	</div>
-</body>
+  <link rel="stylesheet" href="blob:http://tachyons.io/42efbd1a-876e-43b3-9f0a-aa1c34034575"><link rel="stylesheet" href="blob:http://tachyons.io/0a6f9541-ed2c-4dfd-afe3-84b16aea122f"></head>
+  <body class="w-100 sans-serif" cz-shortcut-listen="true">
 
-</html>
+    <main class="w-100 bt b--black-10 bg-white">
+      <section class="bg-black-0125 w-100">
+          <article class="bt b--black-10 bg-washed-blue black-70 ph3 ph5-ns pv4 pv5-ns" id="getting-started">
+            <div class="mw9 center">
+            <h1 class="mt0 f5 f3-ns">Student Resume Drop</h1>
+            <div class="form-container row resume-form">
+              <div class="col-md-4 col-md-offset-4">
+                <form name="student-submission" enctype="multipart/form-data" method="post" action="/students">
+
+                  <div class="form-field">
+                    <label for="firstname">First Name</label>
+                    <input type="text" name="firstname" placeholder="First" required> <br>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" name="lastname" placeholder="Last" required> <br>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="netid">NetID</label>
+                    <input type="text" name="netid" placeholder="netid" required> <br>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="gradyear">Grad Year</label>
+                    <select name="gradyear" required>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                    </select>
+                  </div>
+
+                  <!-- Major -->
+                  <div class="form-field">
+                    <label for="major">Major</label>
+                    <select name="major" required>
+                      <option value="cs">Computer Science</option>
+                      <option value="ce">Computer Engineering</option>
+                      <option value="ee">Electrical Engineering</option>
+                      <option value="ae">Aerospace Engineering</option>
+                      <option value="age">Agricultural Engineering</option>
+                      <option value="bioe">Bioengineering</option>
+                      <option value="chem">Chemical Engineering</option>
+                      <option value="cive">Civil Engineering</option>
+                      <option value="phys">Engineering Physics</option>
+                      <option value="ge">General Engineering</option>
+                      <option value="ie">Industrial Engineering</option>
+                      <option value="matse">Materials Science and Engineering</option>
+                      <option value="me">Mechanical Engineering/Engineering Mechanics</option>
+                      <option value="npre">Nuclear Engineering</option>
+                      <option value="noneng">Other Major</option>
+                    </select>
+                  </div> <!-- <br> -->
+
+                  <!-- Level -->
+                  <div class="form-field">
+                    <label for="level"> Level </label>
+                    <select name="level" required>
+                      <option value="undergrad">Undergraduate</option>
+                      <option value="masters">Master's</option>
+                      <option value="phd">PhD</option>
+                    </select>
+                  </div> <!-- <br> -->
+
+                  <!-- looking for -->
+                  <div class="form-field">
+                    <label> Seeking</label> <br>
+                    <input type="radio" name="seeking" value="fulltime" required> Full time
+                    <input type="radio" name="seeking" value="internship" style="margin-left:5px" required> Internship
+                  </div>
+                  <br>
+
+                  <!-- File upload -->
+                  <div class="form-field">
+                    <label>Resume</label><br>
+                    <input type="file" name="resume" id="resume" accept="application/pdf" required>
+                  </div>
+                  <br>
+
+                  <!-- Recaptcha -->
+                  <div class="g-recaptcha" data-sitekey="6LdWKggUAAAAAMRWc6qSEdb_cdsf_jLpG1v41zEd"></div>
+                  <input type="submit">
+                </form>
+
+              </div>
+            </div>
+</div>
+          </article>
+    </section>
+  </main>
+  <% include partials/template/footer.ejs %>

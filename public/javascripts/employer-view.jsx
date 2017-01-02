@@ -13,7 +13,7 @@ var EmployerDashboard = React.createClass({
 		this.setState({results: data});
 	},
 	render: function () {
-		var toRender; 
+		var toRender;
 		if (this.state.results.length > 0){
 			toRender = <ResultsTable results={this.state.results} />;
 		}
@@ -54,7 +54,7 @@ var SearchFields = React.createClass({
 		if (this.state.netid) formData.netid = this.state.netid;
 
 		var gradyear = [];
-		for (var year = 2015; year <= 2019; year++) {
+		for (var year = 2017; year <= 2022; year++) {
 			if (this.state["gradyear" + year]) gradyear.push(year);
 		}
 		if (gradyear.length > 0) formData.gradyear = gradyear;
@@ -102,11 +102,13 @@ var SearchFields = React.createClass({
 
 					<div className="search-field">
 						<label htmlFor="gradyear">Graduation Year</label><br/>
-						<input type="checkbox" name="gradyear[]" value="2015" checkedLink={this.linkState('gradyear2015')} /> 2015
-						<input type="checkbox" name="gradyear[]" value="2016" checkedLink={this.linkState('gradyear2016')} /> 2016
 						<input type="checkbox" name="gradyear[]" value="2017" checkedLink={this.linkState('gradyear2017')} /> 2017
 						<input type="checkbox" name="gradyear[]" value="2018" checkedLink={this.linkState('gradyear2018')} /> 2018
 						<input type="checkbox" name="gradyear[]" value="2019" checkedLink={this.linkState('gradyear2019')} /> 2019
+						<input type="checkbox" name="gradyear[]" value="2019" checkedLink={this.linkState('gradyear2019')} /> 2019
+						<input type="checkbox" name="gradyear[]" value="2020" checkedLink={this.linkState('gradyear2020')} /> 2020
+						<input type="checkbox" name="gradyear[]" value="2021" checkedLink={this.linkState('gradyear2021')} /> 2021
+						<input type="checkbox" name="gradyear[]" value="2022" checkedLink={this.linkState('gradyear2022')} /> 2022
 					</div>
 
 					<div className="search-field">
