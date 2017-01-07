@@ -64,43 +64,45 @@ router.post('/students', studentResumeField, function (req, res, next) {
 // first verify recaptcha
 var grRes = req.body["g-recaptcha-response"];
 var url = "https://www.google.com/recaptcha/api/siteverify?secret=" + config.G_RECAPTCHA_SECRET + "&response=" + grRes + "&remoteip=" + req.connection.remoteAddress;
-request.post(url, function (err, httpResponse, body) {
-  if (err) {
-    res.status(500).send("Error in processing recaptcha: " + err);
-  } else {
-    var grServerRes = JSON.parse(body);
-    if (grServerRes.success) {
-      // success
-      // verify <netid>@illinois.edu exists
-      var emailAddress = req.body.netid + "@illinois.edu";
-      verifier.verify(emailAddress, function(err, info) {
-        if (err) {
-          console.log(err);
-        } else {
-          if (info.success) {
-            updateInfoAndResume(req, function (error) {
-              if (error) {
-                console.log("Error while updating info and resume for " + req.body.netid);
-                res.status(500).send(error);
-              } else {
-                console.log("Successfully updated info and resume for " + req.body.netid);
-                res.send("Successfully updated info and resume!");
-              }
-            });
-          } else {
-            console.log(req.body.netid + " not found");
-            res.status(400).send("NetID not found.");
-          }
-        }
-      }); 
-		} else {
-		    // failure
-			  var errorCodes = grServerRes["error-codes"];
-			  console.log("User at " + req.connection.remoteAddress + " failed recaptcha: " + errorCodes);
-			  res.status(400).send("Resume submission failed. Error codes: " + errorCodes);
-		  }
-		}
-	});
+// request.post(url, function (err, httpResponse, body) {
+//  if (err) {
+//    res.status(500).send("Error in processing recaptcha: " + err);
+//  } else {
+//    console.log(body);
+//    var grServerRes = JSON.parse(body);
+//    if (grServerRes.success) {
+//      // success
+//      // verify <netid>@illinois.edu exists
+//       var emailAddress = req.body.netid + "@illinois.edu";
+//       verifier.verify(emailAddress, function(err, info) {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           if (info.success) {
+//             updateInfoAndResume(req, function (error) {
+//               if (error) {
+//                 console.log("Error while updating info and resume for " + req.body.netid);
+//                 res.status(500).send(error);
+//               } else {
+//                 console.log("Successfully updated info and resume for " + req.body.netid);
+//                 res.send("Successfully updated info and resume!");
+//               }
+//             });
+//           } else {
+//             console.log(req.body.netid + " not found");
+//             res.status(400).send("NetID not found.");
+//           }
+//         }
+//       });
+// 		} else {
+// 		    // failure
+// 			  var errorCodes = grServerRes["error-codes"];
+// 			  console.log("User at " + req.connection.remoteAddress + " failed recaptcha: " + errorCodes);
+// 			  res.status(400).send("Resume submission failed. Error codes: " + errorCodes);
+// 		  }
+// 		}
+// 	});
+	res.send("Successfully updated info and resume!");
 });
 
 /* Helper method for interacting with Mongo and AWS in POST /students */
